@@ -25,15 +25,7 @@ impl<'a> B<'a> {
 
   //== unfortunate stuff needed for B[]/Vec<B> ==//
 
-  // how to add a depth counter?
-  // because these routines are specific to B, what do you do for self-referential
-  // structs? how many layers do you go?
-  // need an upper bound for how many layers down you will generate code to handle
-  // self referential structs work fine with a single one, just call s.print_self,
-  // and that routine will handle levels and dispatching calls to other structs'
-  // print_self methods, but we cannot just make dispatch control to another struct, since
-  // it does not know how to access itself, and we can't assume we can make a copy
-
+  // note how many of these functions are identical except in the way they access v
 
   pub fn dtrace_print_arr(v: &[&B], prefix: String) {
     dtrace_print_pointer(v as *const _ as *const () as usize, prefix.clone());
