@@ -28,7 +28,6 @@ fn main() {
   let c2 = C { f1: 19, f2: 10 };
   let c3 = C { f1: 7, f2: 61 };
   let c_arr = [&c, &c2, &c3];
-  println!("{:p}", &c_arr);
   baz(&c_arr);
 
   let b2 = B { f1: 6, f2: 1, f3: &c2 };
