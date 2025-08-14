@@ -6,4 +6,4 @@ To run Daikon,
 The daikon library is included privately in each file for now. They should be identical across
 the four files.
 
-Everything in the impl blocks is generated, and everything in the function bodies in main.rs is generated.
+Every impl block is generated, and every function body (except for main) in main.rs is generated.
