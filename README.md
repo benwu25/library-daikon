@@ -1,7 +1,7 @@
 To run Daikon,
 
  * `touch main.dtrace && cargo run`
- * `java -cp $DAIKONDIR daikon.Daikon main.dtrace main.decls`
+ * `java -cp $DAIKONDIR/daikon.jar daikon.Daikon main.dtrace main.decls`
 
 The daikon library is included privately in each file for now. They should be identical across
 the four files.
