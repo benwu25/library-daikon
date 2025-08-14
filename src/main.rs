@@ -101,7 +101,7 @@ static bar_counter: LazyLock<Mutex<u32>> = LazyLock::new(|| Mutex::new(1));
 static baz_counter: LazyLock<Mutex<u32>> = LazyLock::new(|| Mutex::new(1));
 static foo_bar_counter: LazyLock<Mutex<u32>> = LazyLock::new(|| Mutex::new(1));
 
-
+// T must implement Display trait
 fn dtrace_print_prim_arr<T: std::fmt::Display>(v: &[T], prefix: String) {
   let mut traces = match File::options().append(true).open("main.dtrace") {
     Err(why) => panic!("Daikon couldn't open file, {}", why),

@@ -219,6 +219,22 @@ fn dtrace_print_pointer(v: usize, prefix: String) {
   writeln!(&mut traces, "0");
 }
 
+fn dtrace_entry_no_nonce(name: &str) {
+  let mut traces = match File::options().append(true).open("main.dtrace") {
+    Err(why) => panic!("Daikon couldn't open file, {}", why),
+    Ok(traces) => traces,
+  };
+  writeln!(&mut traces, "{}", name);
+}
+
+fn dtrace_exit_no_nonce(name: &str) {
+  let mut traces = match File::options().append(true).open("main.dtrace") {
+    Err(why) => panic!("Daikon couldn't open file, {}", why),
+    Ok(traces) => traces,
+  };
+  writeln!(&mut traces, "{}", name);
+}
+
 fn dtrace_entry(name: &str, nonce: u32) {
   let mut traces = match File::options().append(true).open("main.dtrace") {
     Err(why) => panic!("Daikon couldn't open file, {}", why),

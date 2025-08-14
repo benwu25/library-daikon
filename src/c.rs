@@ -109,17 +109,6 @@ impl C {
 // nonce counters
 /* none */
 
-// * example fragments to specify array access pattern at compile time with strings
-/*
-
-"let mut traces ... arr.push_str(&format!("{} ", v[i]"
-+ access_pattern_str
-+ ")); i += 1; ... arr.push_str(&format!("{}", v[v.len()-1]"
-+ access_pattern_str
-+ ")); } arr.push_str("]"); ... writeln!(&mut traces, "0");
-
-*/
-
 // T must implement Display trait
 fn dtrace_print_prim_arr<T: std::fmt::Display>(v: &[T], prefix: String) {
   let mut traces = match File::options().append(true).open("main.dtrace") {
@@ -171,6 +160,22 @@ fn dtrace_print_pointer(v: usize, prefix: String) {
   writeln!(&mut traces, "{}", prefix);
   writeln!(&mut traces, "0x{:x}", v);
   writeln!(&mut traces, "0");
+}
+
+fn dtrace_entry_no_nonce(name: &str) {
+  let mut traces = match File::options().append(true).open("main.dtrace") {
+    Err(why) => panic!("Daikon couldn't open file, {}", why),
+    Ok(traces) => traces,
+  };
+  writeln!(&mut traces, "{}", name);
+}
+
+fn dtrace_exit_no_nonce(name: &str) {
+  let mut traces = match File::options().append(true).open("main.dtrace") {
+    Err(why) => panic!("Daikon couldn't open file, {}", why),
+    Ok(traces) => traces,
+  };
+  writeln!(&mut traces, "{}", name);
 }
 
 fn dtrace_entry(name: &str, nonce: u32) {
