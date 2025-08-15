@@ -114,7 +114,7 @@ fn dtrace_print_prim_arr<T: std::fmt::Display>(v: &[T], prefix: String) {
     arr.push_str(&format!("{} ", v[i]));
     i += 1;
   }
-  if arr.len() > 0 {
+  if v.len() > 0 {
     arr.push_str(&format!("{}", v[v.len()-1]));
   }
   arr.push_str("]");

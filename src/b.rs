@@ -81,7 +81,7 @@ impl<'a> B<'a> {
       arr.push_str(&format!("{} ", v[i].f1));
       i += 1;
     }
-    if arr.len() > 0 {
+    if v.len() > 0 {
       arr.push_str(&format!("{}", v[v.len()-1].f1));
     }
     arr.push_str("]");
@@ -101,7 +101,7 @@ impl<'a> B<'a> {
       arr.push_str(&format!("{} ", v[i].f2));
       i += 1;
     }
-    if arr.len() > 0 {
+    if v.len() > 0 {
       arr.push_str(&format!("{}", v[v.len()-1].f2));
     }
     arr.push_str("]");
@@ -121,7 +121,7 @@ impl<'a> B<'a> {
       arr.push_str(&format!("{} ", v[i].f3.f1));
       i += 1;
     }
-    if arr.len() > 0 {
+    if v.len() > 0 {
       arr.push_str(&format!("{}", v[v.len()-1].f3.f1));
     }
     arr.push_str("]");
@@ -141,7 +141,7 @@ impl<'a> B<'a> {
       arr.push_str(&format!("{} ", v[i].f3.f2));
       i += 1;
     }
-    if arr.len() > 0 {
+    if v.len() > 0 {
       arr.push_str(&format!("{}", v[v.len()-1].f3.f2));
     }
     arr.push_str("]");
@@ -172,7 +172,7 @@ fn dtrace_print_prim_arr<T: std::fmt::Display>(v: &[T], prefix: String) {
     arr.push_str(&format!("{} ", v[i]));
     i += 1;
   }
-  if arr.len() > 0 {
+  if v.len() > 0 {
     arr.push_str(&format!("{}", v[v.len()-1]));
   }
   arr.push_str("]");
