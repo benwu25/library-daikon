@@ -43,12 +43,14 @@ fn main() {
 
 fn foo(a: &A, b: i32) {
   dtrace_entry("foo:::ENTER", *foo_counter.lock().unwrap());
+  dtrace_print_pointer(a as *const _ as usize, String::from("a"));
   a.dtrace_print(3, String::from("a"));
   dtrace_print_prim::<i32>(b, String::from("b"));
   dtrace_newline();
 
 
   dtrace_exit("foo:::EXIT1", *foo_counter.lock().unwrap());
+  dtrace_print_pointer(a as *const _ as usize, String::from("a"));
   a.dtrace_print(3, String::from("a"));
   dtrace_print_prim::<i32>(b, String::from("b"));
   dtrace_newline();
@@ -57,10 +59,12 @@ fn foo(a: &A, b: i32) {
 
 fn bar(x: &[i32]) {
   dtrace_entry("bar:::ENTER", *bar_counter.lock().unwrap());
+  dtrace_print_pointer(x as *const _ as *const () as usize, String::from("x"));
   dtrace_print_prim_arr::<i32>(&x, String::from("x"));
   dtrace_newline();
 
   dtrace_exit("bar:::EXIT1", *bar_counter.lock().unwrap());
+  dtrace_print_pointer(x as *const _ as *const () as usize, String::from("x"));
   dtrace_print_prim_arr::<i32>(&x, String::from("x"));
   dtrace_newline();
   *bar_counter.lock().unwrap() += 1;
@@ -68,10 +72,12 @@ fn bar(x: &[i32]) {
 
 fn baz(c_arr: &[&C]) {
   dtrace_entry("baz:::ENTER", *baz_counter.lock().unwrap());
+  dtrace_print_pointer(c_arr as *const _ as *const () as usize, String::from("c_arr"));
   C::dtrace_print_arr(&c_arr, String::from("c_arr"));
   dtrace_newline();
 
   dtrace_exit("baz:::EXIT1", *baz_counter.lock().unwrap());
+  dtrace_print_pointer(c_arr as *const _ as *const () as usize, String::from("c_arr"));
   C::dtrace_print_arr(&c_arr, String::from("c_arr"));
   dtrace_newline();
   *baz_counter.lock().unwrap() += 1;
@@ -79,10 +85,12 @@ fn baz(c_arr: &[&C]) {
 
 fn foo_bar(b_arr: &[&B]) {
   dtrace_entry("foo_bar:::ENTER", *foo_bar_counter.lock().unwrap());
+  dtrace_print_pointer(b_arr as *const _ as *const () as usize, String::from("b_arr"));
   B::dtrace_print_arr(&b_arr, String::from("b_arr"));
   dtrace_newline();
 
   dtrace_exit("foo_bar:::EXIT1", *foo_bar_counter.lock().unwrap());
+  dtrace_print_pointer(b_arr as *const _ as *const () as usize, String::from("b_arr"));
   B::dtrace_print_arr(&b_arr, String::from("b_arr"));
   dtrace_newline();
   *foo_bar_counter.lock().unwrap() += 1;
@@ -113,11 +121,29 @@ fn dtrace_open() -> Option<File> {
   }
 }
 
+pub fn dtrace_print_pointer_arr<T>(v: &[&T], prefix: String) {
+  match &mut *tr.lock().unwrap() {
+    None => { panic!("dtrace file is not open"); },
+    Some(traces) => {
+      writeln!(traces, "{}", format!("{}{}", prefix.clone(), "[..]"));
+      let mut arr = String::from("[");
+      let mut i = 0;
+      while i < v.len()-1 {
+        arr.push_str(&format!("0x{:x} ", v[i] as *const _ as usize));
+        i += 1;
+      }
+      if v.len() > 0 {
+        arr.push_str(&format!("0x{:x}", v[i] as *const _ as usize));
+      }
+      arr.push_str("]");
+      writeln!(traces, "{}", arr);
+      writeln!(traces, "0");
+    },
+  }
+}
+
 // T must implement Display trait
 fn dtrace_print_prim_arr<T: std::fmt::Display>(v: &[T], prefix: String) {
-  // should be relocated as Mike suggested
-  dtrace_print_pointer(v as *const _ as *const () as usize, prefix.clone());
-
   match &mut *tr.lock().unwrap() {
     None => { panic!("dtrace file is not open"); },
     Some(traces) => {
