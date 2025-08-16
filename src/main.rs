@@ -93,6 +93,9 @@ fn foo_bar(b_arr: &[&B]) {
 
 //== private daikon library ==//
 
+// dtrace File
+static tr: LazyLock<Mutex<Option<File>>> = LazyLock::new(||
+                                               Mutex::new(dtrace_open()));
 
 // nonce counters
 static foo_counter: LazyLock<Mutex<u32>> = LazyLock::new(|| Mutex::new(1));
@@ -100,99 +103,120 @@ static bar_counter: LazyLock<Mutex<u32>> = LazyLock::new(|| Mutex::new(1));
 static baz_counter: LazyLock<Mutex<u32>> = LazyLock::new(|| Mutex::new(1));
 static foo_bar_counter: LazyLock<Mutex<u32>> = LazyLock::new(|| Mutex::new(1));
 
+fn dtrace_open() -> Option<File> {
+  match File::options().append(true).open("main.dtrace") {
+    Err(why) => {
+      panic!("Daikon couldn't open file, {}", why);
+      None
+    },
+    Ok(traces) => Some(traces),
+  }
+}
+
 // T must implement Display trait
 fn dtrace_print_prim_arr<T: std::fmt::Display>(v: &[T], prefix: String) {
-  let mut traces = match File::options().append(true).open("main.dtrace") {
-    Err(why) => panic!("Daikon couldn't open file, {}", why),
-    Ok(traces) => traces,
-  };
+  // should be relocated as Mike suggested
   dtrace_print_pointer(v as *const _ as *const () as usize, prefix.clone());
-  writeln!(&mut traces, "{}", format!("{}{}", prefix.clone(), "[..]"));
-  let mut arr = String::from("[");
-  let mut i = 0;
-  while i < v.len()-1 {
-    arr.push_str(&format!("{} ", v[i]));
-    i += 1;
-  }
-  if v.len() > 0 {
-    arr.push_str(&format!("{}", v[v.len()-1]));
-  }
-  arr.push_str("]");
-  writeln!(&mut traces, "{}", arr);
-  writeln!(&mut traces, "0");
+
+  match &mut *tr.lock().unwrap() {
+    None => { panic!("dtrace file is not open"); },
+    Some(traces) => {
+      writeln!(traces, "{}", format!("{}{}", prefix.clone(), "[..]"));
+      let mut arr = String::from("[");
+      let mut i = 0;
+      while i < v.len()-1 {
+        arr.push_str(&format!("{} ", v[i]));
+        i += 1;
+      }
+      if v.len() > 0 {
+        arr.push_str(&format!("{}", v[v.len()-1]));
+      }
+      arr.push_str("]");
+      writeln!(traces, "{}", arr);
+      writeln!(traces, "0");
+    },
+  };
 }
 
 fn dtrace_print_str(v: &str, prefix: String) {
-  let mut traces = match File::options().append(true).open("main.dtrace") {
-    Err(why) => panic!("Daikon couldn't open file, {}", why),
-    Ok(traces) => traces,
-  };
-  writeln!(&mut traces, "{}", prefix);
-  writeln!(&mut traces, "{}", v);
-  writeln!(&mut traces, "0");
+  match &mut *tr.lock().unwrap() {
+    None => { panic!("dtrace file is not open"); },
+    Some(traces) => {
+      writeln!(traces, "{}", prefix);
+      writeln!(traces, "{}", v);
+      writeln!(traces, "0");    
+    }
+  }
 }
 
 // T must implement Display trait
 fn dtrace_print_prim<T: std::fmt::Display>(v: T, prefix: String) {
-  let mut traces = match File::options().append(true).open("main.dtrace") {
-    Err(why) => panic!("Daikon couldn't open file, {}", why),
-    Ok(traces) => traces,
-  };
-  writeln!(&mut traces, "{}", prefix);
-  writeln!(&mut traces, "{}", v);
-  writeln!(&mut traces, "0");
+  match &mut *tr.lock().unwrap() {
+    None => { panic!("dtrace file is not open"); },
+    Some(traces) => {
+      writeln!(traces, "{}", prefix);
+      writeln!(traces, "{}", v);
+      writeln!(traces, "0");    
+    }
+  }
 }
 
 fn dtrace_print_pointer(v: usize, prefix: String) {
-  let mut traces = match File::options().append(true).open("main.dtrace") {
-    Err(why) => panic!("Daikon couldn't open file, {}", why),
-    Ok(traces) => traces,
+  match &mut *tr.lock().unwrap() {
+    None => { panic!("dtrace file is not open"); },
+    Some(traces) => {
+      writeln!(traces, "{}", prefix);
+      writeln!(traces, "0x{:x}", v);
+      writeln!(traces, "0");
+    },
   };
-  writeln!(&mut traces, "{}", prefix);
-  writeln!(&mut traces, "0x{:x}", v);
-  writeln!(&mut traces, "0");
 }
 
 fn dtrace_entry_no_nonce(name: &str) {
-  let mut traces = match File::options().append(true).open("main.dtrace") {
-    Err(why) => panic!("Daikon couldn't open file, {}", why),
-    Ok(traces) => traces,
-  };
-  writeln!(&mut traces, "{}", name);
+  match &mut *tr.lock().unwrap() {
+    None => { panic!("dtrace file is not open"); },
+    Some(traces) => {
+      writeln!(traces, "{}", name);
+    }
+  }
 }
 
 fn dtrace_exit_no_nonce(name: &str) {
-  let mut traces = match File::options().append(true).open("main.dtrace") {
-    Err(why) => panic!("Daikon couldn't open file, {}", why),
-    Ok(traces) => traces,
-  };
-  writeln!(&mut traces, "{}", name);
+  match &mut *tr.lock().unwrap() {
+    None => { panic!("dtrace file is not open"); },
+    Some(traces) => {
+      writeln!(traces, "{}", name);
+    }
+  }
 }
 
 fn dtrace_entry(name: &str, nonce: u32) {
-  let mut traces = match File::options().append(true).open("main.dtrace") {
-    Err(why) => panic!("Daikon couldn't open file, {}", why),
-    Ok(traces) => traces,
-  };
-  writeln!(&mut traces, "{}", name);
-  writeln!(&mut traces, "this_invocation_nonce");
-  writeln!(&mut traces, "{}", nonce);
+  match &mut *tr.lock().unwrap() {
+    None => { panic!("dtrace file is not open"); },
+    Some(traces) => {
+      writeln!(traces, "{}", name);
+      writeln!(traces, "this_invocation_nonce");
+      writeln!(traces, "{}", nonce);
+    },
+  }
 }
 
 fn dtrace_exit(name: &str, nonce: u32) {
-  let mut traces = match File::options().append(true).open("main.dtrace") {
-    Err(why) => panic!("Daikon couldn't open file, {}", why),
-    Ok(traces) => traces,
-  };
-  writeln!(&mut traces, "{}", name);
-  writeln!(&mut traces, "this_invocation_nonce");
-  writeln!(&mut traces, "{}", nonce);
+  match &mut *tr.lock().unwrap() {
+    None => { panic!("dtrace file is not open"); },
+    Some(traces) => {
+      writeln!(traces, "{}", name);
+      writeln!(traces, "this_invocation_nonce");
+      writeln!(traces, "{}", nonce);
+    },
+  }
 }
 
 fn dtrace_newline() {
-  let mut traces = match File::options().append(true).open("main.dtrace") {
-    Err(why) => panic!("Daikon couldn't open file, {}", why),
-    Ok(traces) => traces,
-  };
-  writeln!(&mut traces, "");
+  match &mut *tr.lock().unwrap() {
+    None => { panic!("dtrace file is not open"); },
+    Some(traces) => {
+      writeln!(traces, "");
+    }
+  }
 }

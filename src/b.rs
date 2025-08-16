@@ -13,10 +13,10 @@ pub struct B<'a> {
 
 impl<'a> B<'a> {
   pub fn dtrace_print(&self, depth: i32, prefix: String) {
+    dtrace_print_pointer(self as *const _ as usize, prefix.clone());
     if depth == 0 {
       return;
     }
-    dtrace_print_pointer(self as *const _ as usize, prefix.clone());
     dtrace_print_prim::<i32>(self.f1, format!("{}{}", prefix, ".f1"));
     dtrace_print_prim::<u16>(self.f2, format!("{}{}", prefix, ".f2"));
     self.f3.dtrace_print(depth - 1, format!("{}{}", prefix, ".f3"));
@@ -32,21 +32,21 @@ impl<'a> B<'a> {
 
     B::dtrace_print_pointer_arr(&v, prefix.clone());
 
-    // DFS field traversal  (see src/c.rs)
+    // Proposed fix: make a Vec<&C> and call C::dtrace_print_arr().
+    let mut ref_arr = Vec::new();
+    let mut i = 0;
+    while i < v.len() {
+      ref_arr.push(v[i].f3);
+      i += 1;
+    }
 
-    // B::f1 -- print leaf
     B::dtrace_print_Bf1_arr(&v, format!("{}{}", prefix, ".f1"));
-
-    // B::f2 -- print leaf
     B::dtrace_print_Bf2_arr(&v, format!("{}{}", prefix, ".f2"));
+    C::dtrace_print_fields_vec(&ref_arr, format!("{}{}", prefix, ".f3"));
 
-    // B::f3 -- continue down...
-
-    // B::f3::f1 -- print leaf
-    B::dtrace_print_Bf3_Cf1_arr(&v, format!("{}{}", prefix, ".f3.f1"));
-
-    // B::f3::f2 -- print leaf
-    B::dtrace_print_Bf3_Cf2_arr(&v, format!("{}{}", prefix, ".f3.f2"));
+    /* old implementation */
+    // B::dtrace_print_Bf3_Cf1_arr(&v, format!("{}{}", prefix, ".f3.f1"));
+    // B::dtrace_print_Bf3_Cf2_arr(&v, format!("{}{}", prefix, ".f3.f2"));
   }
 
   pub fn dtrace_print_pointer_arr(v: &[&B], prefix: String) {

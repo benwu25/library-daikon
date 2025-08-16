@@ -11,12 +11,23 @@ pub struct C {
 
 impl C {
   pub fn dtrace_print(&self, depth: i32, prefix: String) {
+    dtrace_print_pointer(self as *const _ as usize, prefix.clone());
     if depth == 0 {
       return;
     }
-    dtrace_print_pointer(self as *const _ as usize, prefix.clone());
     dtrace_print_prim::<i16>(self.f1, format!("{}{}", prefix, ".f1"));
     dtrace_print_prim::<i32>(self.f2, format!("{}{}", prefix, ".f2"));
+  }
+
+  // don't care about addr of v or addr of C's, this is only called when
+  // C's are nested in an array of some other struct like B
+  pub fn dtrace_print_fields_vec(v: &Vec<&C>, prefix: String) {
+    // dtrace_print_pointer(v[0] as *const _ as usize, prefix.clone());
+
+    // C::dtrace_print_pointer_vec(v, prefix.clone());
+
+    C::dtrace_print_f1_vec(v, format!("{}{}", prefix, ".f1"));
+    C::dtrace_print_f2_vec(v, format!("{}{}", prefix, ".f2"));
   }
 
   pub fn dtrace_print_arr(v: &[&C], prefix: String) {
@@ -40,6 +51,27 @@ impl C {
     C::dtrace_print_f2_arr(&v, format!("{}{}", prefix, ".f2"));
   }
 
+  // TODO
+  pub fn dtrace_print_pointer_vec(v: &Vec<&C>, prefix: String) {
+    let mut traces = match File::options().append(true).open("main.dtrace") {
+      Err(why) => panic!("Daikon couldn't open file, {}", why),
+      Ok(traces) => traces,
+    };
+    writeln!(&mut traces, "{}", format!("{}{}", prefix.clone(), "[..]"));
+    let mut arr = String::from("[");
+    let mut i = 0;
+    while i < v.len() - 1 {
+      arr.push_str(&format!("0x{:x} ", v[i] as *const _ as usize));
+      i += 1;
+    }
+    if v.len() > 0 {
+      arr.push_str(&format!("0x{:x}", v[v.len() - 1] as *const _ as usize));
+    }
+    arr.push_str("]");
+    writeln!(&mut traces, "{}", arr);
+    writeln!(&mut traces, "0");
+  }
+
   pub fn dtrace_print_pointer_arr(v: &[&C], prefix: String) {
     let mut traces = match File::options().append(true).open("main.dtrace") {
       Err(why) => panic!("Daikon couldn't open file, {}", why),
@@ -54,6 +86,27 @@ impl C {
     }
     if v.len() > 0 {
       arr.push_str(&format!("0x{:x}", v[i] as *const _ as usize));
+    }
+    arr.push_str("]");
+    writeln!(&mut traces, "{}", arr);
+    writeln!(&mut traces, "0");
+  }
+
+  // TODO
+  pub fn dtrace_print_f1_vec(v: &Vec<&C>, prefix: String) {
+    let mut traces = match File::options().append(true).open("main.dtrace") {
+      Err(why) => panic!("Daikon couldn't open file, {}", why),
+      Ok(traces) => traces,
+    };
+    writeln!(&mut traces, "{}", format!("{}{}", prefix.clone(), "[..]"));
+    let mut arr = String::from("[");
+    let mut i = 0;
+    while i < v.len()-1 {
+      arr.push_str(&format!("{} ", v[i].f1));
+      i += 1;
+    }
+    if v.len() > 0 {
+      arr.push_str(&format!("{}", v[v.len() - 1].f1));
     }
     arr.push_str("]");
     writeln!(&mut traces, "{}", arr);
@@ -75,6 +128,27 @@ impl C {
     }
     if v.len() > 0 {
       arr.push_str(&format!("{}", v[v.len()-1].f1));
+    }
+    arr.push_str("]");
+    writeln!(&mut traces, "{}", arr);
+    writeln!(&mut traces, "0");
+  }
+
+  // TODO
+  pub fn dtrace_print_f2_vec(v: &Vec<&C>, prefix: String) {
+    let mut traces = match File::options().append(true).open("main.dtrace") {
+      Err(why) => panic!("Daikon couldn't open file, {}", why),
+      Ok(traces) => traces,
+    };
+    writeln!(&mut traces, "{}", format!("{}{}", prefix.clone(), "[..]"));
+    let mut arr = String::from("[");
+    let mut i = 0;
+    while i < v.len()-1 {
+      arr.push_str(&format!("{} ", v[i].f2));
+      i += 1;
+    }
+    if v.len() > 0 {
+      arr.push_str(&format!("{}", v[v.len()-1].f2));
     }
     arr.push_str("]");
     writeln!(&mut traces, "{}", arr);

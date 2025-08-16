@@ -13,10 +13,10 @@ pub struct A<'a> {
 
 impl<'a> A<'a> {
   pub fn dtrace_print(&self, depth: i32, prefix: String) {
+    dtrace_print_pointer(self as *const _ as usize, prefix.clone());
     if depth == 0 {
       return;
     }
-    dtrace_print_pointer(self as *const _ as usize, prefix.clone());
     dtrace_print_str(self.f1, format!("{}{}", prefix, ".f1"));
     dtrace_print_prim::<u32>(self.f2, format!("{}{}", prefix, ".f2"));
     self.f3.dtrace_print(depth - 1, format!("{}{}", prefix, ".f3"));
