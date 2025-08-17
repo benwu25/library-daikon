@@ -7,10 +7,10 @@ use crate::tr;
 pub struct C {
   pub cf1: i16,
   pub cf2: i32,
-  // pub f3: array or vec
 }
 
 impl C {
+  // rename to dtrace_print_fields
   pub fn dtrace_print(&self, depth: i32, prefix: String) {
     if depth == 0 {
       return;
@@ -19,19 +19,24 @@ impl C {
     dtrace_print_prim::<i32>(self.cf2, format!("{}{}", prefix, ".cf2"));
   }
 
-  // don't care about addr of v or addr of C's
-  pub fn dtrace_print_fields_vec(v: &Vec<&C>, prefix: String) {
-    C::dtrace_print_f1_vec(v, format!("{}{}", prefix, ".cf1"));
-    C::dtrace_print_f2_vec(v, format!("{}{}", prefix, ".cf2"));
+  pub fn dtrace_print_fields_vec(v: &Vec<&C>, depth: i32, prefix: String) {
+    if depth == 0 {
+      return;
+    }
+
+    C::dtrace_print_cf1_vec(v, format!("{}{}", prefix, ".cf1"));
+    C::dtrace_print_cf2_vec(v, format!("{}{}", prefix, ".cf2"));
   }
 
-  pub fn dtrace_print_arr(v: &[&C], prefix: String) {
-    dtrace_print_pointer_arr::<C>(&v, prefix.clone());
-    C::dtrace_print_f1_arr(&v, format!("{}{}", prefix, "[..].cf1"));
-    C::dtrace_print_f2_arr(&v, format!("{}{}", prefix, "[..].cf2"));
+  pub fn dtrace_print_fields_arr(v: &[&C], depth: i32, prefix: String) {
+    if depth == 0 {
+      return;
+    }
+
+    C::dtrace_print_cf1_arr(v, format!("{}{}", prefix, ".cf1"));
+    C::dtrace_print_cf2_arr(v, format!("{}{}", prefix, ".cf2"));
   }
 
-  // TODO
   pub fn dtrace_print_pointer_vec(v: &Vec<&C>, prefix: String) {
     match &mut *tr.lock().unwrap() {
       None => panic!("dtrace file is not open"),
@@ -53,7 +58,7 @@ impl C {
     }
   }
 
-  pub fn dtrace_print_f1_vec(v: &Vec<&C>, prefix: String) {
+  pub fn dtrace_print_cf1_vec(v: &Vec<&C>, prefix: String) {
     match &mut *tr.lock().unwrap() {
       None => panic!("dtrace file is not open"),
       Some(traces) => {
@@ -75,7 +80,7 @@ impl C {
   }
 
   // like dtrace_print_prim_arr but v[i].f1 instead of v[i]
-  pub fn dtrace_print_f1_arr(v: &[&C], prefix: String) {
+  pub fn dtrace_print_cf1_arr(v: &[&C], prefix: String) {
     match &mut *tr.lock().unwrap() {
       None => panic!("dtrace file is not open"),
       Some(traces) => {
@@ -96,8 +101,7 @@ impl C {
     }
   }
 
-  // TODO
-  pub fn dtrace_print_f2_vec(v: &Vec<&C>, prefix: String) {
+  pub fn dtrace_print_cf2_vec(v: &Vec<&C>, prefix: String) {
     match &mut *tr.lock().unwrap() {
       None => panic!("dtrace file is not open"),
       Some(traces) => {
@@ -118,8 +122,7 @@ impl C {
     }
   }
 
-  // v[i].f2 instead of v[i]
-  pub fn dtrace_print_f2_arr(v: &[&C], prefix: String) {
+  pub fn dtrace_print_cf2_arr(v: &[&C], prefix: String) {
     match &mut *tr.lock().unwrap() {
       None => panic!("dtrace file is not open"),
       Some(traces) => {
@@ -151,7 +154,28 @@ pub fn dtrace_print_pointer_arr<T>(v: &[&T], prefix: String) {
   match &mut *tr.lock().unwrap() {
     None => panic!("dtrace file is not open"),
     Some(traces) => {
-      writeln!(traces, "{}", format!("{}{}", prefix.clone(), "[..]"));
+      writeln!(traces, "{}", prefix.clone());
+      let mut arr = String::from("[");
+      let mut i = 0;
+      while i < v.len()-1 {
+        arr.push_str(&format!("0x{:x} ", v[i] as *const _ as usize));
+        i += 1;
+      }
+      if v.len() > 0 {
+        arr.push_str(&format!("0x{:x}", v[i] as *const _ as usize));
+      }
+      arr.push_str("]");
+      writeln!(traces, "{}", arr);
+      writeln!(traces, "0");
+    },
+  }
+}
+
+pub fn dtrace_print_pointer_vec<T>(v: &Vec<&T>, prefix: String) {
+  match &mut *tr.lock().unwrap() {
+    None => panic!("dtrace file is not open"),
+    Some(traces) => {
+      writeln!(traces, "{}", prefix.clone());
       let mut arr = String::from("[");
       let mut i = 0;
       while i < v.len()-1 {

@@ -9,20 +9,21 @@ pub struct D<'a> {
 }
 
 impl<'a> D<'a> {
+  // rename to dtrace_print_fields
   pub fn dtrace_print(&self, depth: i32, prefix: String) {
     if depth == 0 {
       return;
     }
-    dtrace_print_prim_arr::<i32>(&self.df1, format!("{}{}", prefix, ".df1"));
+  
+    dtrace_print_prim_arr::<i32>(self.df1, format!("{}{}", prefix, ".df1"));
   }
 
-  pub fn dtrace_print_arr(v: &[&D], prefix: String) {
-    dtrace_print_pointer_arr::<D>(&v, prefix.clone());
-    D::dtrace_print_df1_arr(&v, format!("{}{}", prefix.clone(), "[..].df1"));
-  }
+  pub fn dtrace_print_fields_arr(v: &[&D], depth: i32, prefix: String) {
+    if depth == 0 {
+      return;
+    }
 
-  pub fn dtrace_print_vec(v: &Vec<&D>, prefix: String) {
-
+    D::dtrace_print_df1_arr(v, format!("{}{}", prefix, ".df1"));
   }
 
   // only pointers
@@ -59,7 +60,28 @@ pub fn dtrace_print_pointer_arr<T>(v: &[&T], prefix: String) {
   match &mut *tr.lock().unwrap() {
     None => panic!("dtrace file is not open"),
     Some(traces) => {
-      writeln!(traces, "{}", format!("{}{}", prefix.clone(), "[..]"));
+      writeln!(traces, "{}", prefix.clone());
+      let mut arr = String::from("[");
+      let mut i = 0;
+      while i < v.len()-1 {
+        arr.push_str(&format!("0x{:x} ", v[i] as *const _ as usize));
+        i += 1;
+      }
+      if v.len() > 0 {
+        arr.push_str(&format!("0x{:x}", v[i] as *const _ as usize));
+      }
+      arr.push_str("]");
+      writeln!(traces, "{}", arr);
+      writeln!(traces, "0");
+    },
+  }
+}
+
+pub fn dtrace_print_pointer_vec<T>(v: &Vec<&T>, prefix: String) {
+  match &mut *tr.lock().unwrap() {
+    None => panic!("dtrace file is not open"),
+    Some(traces) => {
+      writeln!(traces, "{}", prefix.clone());
       let mut arr = String::from("[");
       let mut i = 0;
       while i < v.len()-1 {

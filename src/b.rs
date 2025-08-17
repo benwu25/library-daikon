@@ -13,6 +13,7 @@ pub struct B<'a> {
 }
 
 impl<'a> B<'a> {
+  // rename to dtrace_print_fields
   pub fn dtrace_print(&self, depth: i32, prefix: String) {
     if depth == 0 {
       return;
@@ -24,25 +25,85 @@ impl<'a> B<'a> {
     self.bf3.dtrace_print(depth - 1, format!("{}{}", prefix, ".bf3"));
   }
 
-  // TODO missing bf3 pointers
-  pub fn dtrace_print_arr(v: &[&B], prefix: String) {
-    dtrace_print_pointer_arr::<B>(&v, prefix.clone());
+  pub fn dtrace_print_fields_arr(v: &[&B], depth: i32, prefix: String) {
+    if depth == 0 {
+      return;
+    }
 
-    // Proposed fix: make a Vec<&C> and call C::dtrace_print_arr().
-    let mut ref_arr = Vec::new();
+    let mut c_ref_arr = Vec::new();
     let mut i = 0;
     while i < v.len() {
-      ref_arr.push(v[i].bf3);
+      c_ref_arr.push(v[i].bf3);
       i += 1;
     }
 
-    B::dtrace_print_f1_arr(&v, format!("{}{}", prefix, "[..].bf1"));
-    B::dtrace_print_f2_arr(&v, format!("{}{}", prefix, "[..].bf2"));
-    // dtrace_print_pointer_arr::<C>(&ref_arr, format!("{}{}", prefix, "[..].bf3"));
-    C::dtrace_print_fields_vec(&ref_arr, format!("{}{}", prefix, "[..].bf3"));
+    B::dtrace_print_bf1_arr(v, format!("{}{}", prefix, ".bf1"));
+    B::dtrace_print_bf2_arr(v, format!("{}{}", prefix, ".bf2"));
+    dtrace_print_pointer_vec::<C>(&c_ref_arr, format!("{}{}", prefix, ".bf3"));
+    C::dtrace_print_fields_vec(&c_ref_arr, depth - 1, format!("{}{}", prefix, ".bf3"));
   }
 
-  pub fn dtrace_print_f1_arr(v: &[&B], prefix: String) {
+  pub fn dtrace_print_fields_vec(v: &Vec<&B>, depth: i32, prefix: String) {
+    if depth == 0 {
+      return;
+    }
+
+    let mut c_ref_arr = Vec::new();
+    let mut i = 0;
+    while i < v.len() {
+      c_ref_arr.push(v[i].bf3);
+      i += 1;
+    }
+
+    B::dtrace_print_bf1_vec(v, format!("{}{}", prefix, ".bf1"));
+    B::dtrace_print_bf2_vec(v, format!("{}{}", prefix, ".bf2"));
+    dtrace_print_pointer_vec::<C>(&c_ref_arr, format!("{}{}", prefix, ".bf3"));
+    C::dtrace_print_fields_vec(&c_ref_arr, depth - 1, format!("{}{}", prefix, ".bf3"));
+  }
+
+  pub fn dtrace_print_bf1_vec(v: &Vec<&B>, prefix: String) {
+    match &mut *tr.lock().unwrap() {
+      None => panic!("dtrace file is not open"),
+      Some(traces) => {
+        writeln!(traces, "{}", prefix);
+        let mut arr = String::from("[");
+        let mut i = 0;
+        while i < v.len()-1 {
+          arr.push_str(&format!("{} ", v[i].bf1));
+          i += 1;
+        }
+        if v.len() > 0 {
+          arr.push_str(&format!("{}", v[i].bf1));
+        }
+        arr.push_str("]");
+        writeln!(traces, "{}", arr);
+        writeln!(traces, "0");
+      },
+    }
+  }
+
+  pub fn dtrace_print_bf2_vec(v: &Vec<&B>, prefix: String) {
+    match &mut *tr.lock().unwrap() {
+      None => panic!("dtrace file is not open"),
+      Some(traces) => {
+        writeln!(traces, "{}", prefix);
+        let mut arr = String::from("[");
+        let mut i = 0;
+        while i < v.len()-1 {
+          arr.push_str(&format!("{} ", v[i].bf2));
+          i += 1;
+        }
+        if v.len() > 0 {
+          arr.push_str(&format!("{}", v[i].bf2));
+        }
+        arr.push_str("]");
+        writeln!(traces, "{}", arr);
+        writeln!(traces, "0");
+      },
+    }
+  }
+
+  pub fn dtrace_print_bf1_arr(v: &[&B], prefix: String) {
     match &mut *tr.lock().unwrap() {
       None => panic!("dtrace file is not open"),
       Some(traces) => {
@@ -63,7 +124,7 @@ impl<'a> B<'a> {
     }
   }
 
-  pub fn dtrace_print_f2_arr(v: &[&B], prefix: String) {
+  pub fn dtrace_print_bf2_arr(v: &[&B], prefix: String) {
     match &mut *tr.lock().unwrap() {
       None => panic!("dtrace file is not open"),
       Some(traces) => {
@@ -96,7 +157,28 @@ pub fn dtrace_print_pointer_arr<T>(v: &[&T], prefix: String) {
   match &mut *tr.lock().unwrap() {
     None => panic!("dtrace file is not open"),
     Some(traces) => {
-      writeln!(traces, "{}", format!("{}{}", prefix.clone(), "[..]"));
+      writeln!(traces, "{}", prefix.clone());
+      let mut arr = String::from("[");
+      let mut i = 0;
+      while i < v.len()-1 {
+        arr.push_str(&format!("0x{:x} ", v[i] as *const _ as usize));
+        i += 1;
+      }
+      if v.len() > 0 {
+        arr.push_str(&format!("0x{:x}", v[i] as *const _ as usize));
+      }
+      arr.push_str("]");
+      writeln!(traces, "{}", arr);
+      writeln!(traces, "0");
+    },
+  }
+}
+
+pub fn dtrace_print_pointer_vec<T>(v: &Vec<&T>, prefix: String) {
+  match &mut *tr.lock().unwrap() {
+    None => panic!("dtrace file is not open"),
+    Some(traces) => {
+      writeln!(traces, "{}", prefix.clone());
       let mut arr = String::from("[");
       let mut i = 0;
       while i < v.len()-1 {

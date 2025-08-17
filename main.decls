@@ -250,6 +250,13 @@ variable b_arr[..].bf2
   dec-type int[]
   rep-type int[]
   comparability -1
+variable b_arr[..].bf3
+  var-kind array
+  enclosing-var b_arr
+  array 1
+  dec-type C[]
+  rep-type hashcode[]
+  comparability -1
 variable b_arr[..].bf3.cf1
   var-kind array
   enclosing-var b_arr
@@ -293,6 +300,13 @@ variable b_arr[..].bf2
   array 1
   dec-type int[]
   rep-type int[]
+  comparability -1
+variable b_arr[..].bf3
+  var-kind array
+  enclosing-var b_arr
+  array 1
+  dec-type C[]
+  rep-type hashcode[]
   comparability -1
 variable b_arr[..].bf3.cf1
   var-kind array
@@ -396,6 +410,456 @@ variable d_arr[..].df1
   enclosing-var d_arr
   array 1
   dec-type D[]
+  rep-type hashcode[]
+  comparability -1
+
+ppt bar_bar:::ENTER
+ppt-type enter
+variable cont_arr
+  var-kind variable
+  dec-type Container[]
+  rep-type hashcode
+  flags is_param nomod classname
+  comparability -1
+variable cont_arr[..]
+  var-kind array
+  enclosing-var cont_arr
+  array 1
+  dec-type Container[]
+  rep-type hashcode[]
+  comparability -1
+variable cont_arr[..].contf1
+  var-kind array
+  enclosing-var cont_arr
+  array 1
+  dec-type Container[]
+  rep-type hashcode[]
+  comparability -1
+variable cont_arr[..].contf1.xf1
+  var-kind array
+  enclosing-var cont_arr
+  array 1
+  dec-type Container[]
+  rep-type int[]
+  comparability -1
+variable cont_arr[..].contf2
+  var-kind array
+  enclosing-var cont_arr
+  array 1
+  dec-type Container[]
+  rep-type hashcode[]
+  comparability -1
+variable cont_arr[..].contf2.yf1
+  var-kind array
+  enclosing-var cont_arr
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability -1
+variable cont_arr[..].contf3
+  var-kind array
+  enclosing-var cont_arr
+  array 1
+  dec-type Container[]
+  rep-type hashcode[]
+  comparability -1
+variable cont_arr[..].contf3.zf1
+  var-kind array
+  enclosing-var cont_arr
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability -1
+
+ppt bar_bar:::EXIT1
+ppt-type exit
+variable cont_arr
+  var-kind variable
+  dec-type Container[]
+  rep-type hashcode
+  flags is_param nomod classname
+  comparability -1
+variable cont_arr[..]
+  var-kind array
+  enclosing-var cont_arr
+  array 1
+  dec-type Container[]
+  rep-type hashcode[]
+  comparability -1
+variable cont_arr[..].contf1
+  var-kind array
+  enclosing-var cont_arr
+  array 1
+  dec-type Container[]
+  rep-type hashcode[]
+  comparability -1
+variable cont_arr[..].contf1.xf1
+  var-kind array
+  enclosing-var cont_arr
+  array 1
+  dec-type Container[]
+  rep-type int[]
+  comparability -1
+variable cont_arr[..].contf2
+  var-kind array
+  enclosing-var cont_arr
+  array 1
+  dec-type Container[]
+  rep-type hashcode[]
+  comparability -1
+variable cont_arr[..].contf2.yf1
+  var-kind array
+  enclosing-var cont_arr
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability -1
+variable cont_arr[..].contf3
+  var-kind array
+  enclosing-var cont_arr
+  array 1
+  dec-type Container[]
+  rep-type hashcode[]
+  comparability -1
+variable cont_arr[..].contf3.zf1
+  var-kind array
+  enclosing-var cont_arr
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability -1
+
+ppt a_vec_depth3:::ENTER
+ppt-type enter
+variable a_vec
+  var-kind variable
+  dec-type A[]
+  rep-type hashcode
+  flags is_param nomod
+  comparability -1
+variable a_vec[..]
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type hashcode[]
+  comparability -1
+variable a_vec[..].af1
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type java.lang.String[]
+  comparability -1
+variable a_vec[..].af2
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type int[]
+  comparability -1
+variable a_vec[..].af3
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type hashcode[]
+  comparability -1
+variable a_vec[..].af3.bf1
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type int[]
+  comparability -1
+variable a_vec[..].af3.bf2
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type int[]
+  comparability -1
+variable a_vec[..].af3.bf3
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type hashcode[]
+  comparability -1
+variable a_vec[..].af3.bf3.cf1
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type int[]
+  comparability -1
+variable a_vec[..].af3.bf3.cf2
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type int[]
+  comparability -1
+
+ppt a_vec_depth3:::EXIT1
+ppt-type exit
+variable a_vec
+  var-kind variable
+  dec-type A[]
+  rep-type hashcode
+  flags is_param nomod
+  comparability -1
+variable a_vec[..]
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type hashcode[]
+  comparability -1
+variable a_vec[..].af1
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type java.lang.String[]
+  comparability -1
+variable a_vec[..].af2
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type int[]
+  comparability -1
+variable a_vec[..].af3
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type hashcode[]
+  comparability -1
+variable a_vec[..].af3.bf1
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type int[]
+  comparability -1
+variable a_vec[..].af3.bf2
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type int[]
+  comparability -1
+variable a_vec[..].af3.bf3
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type hashcode[]
+  comparability -1
+variable a_vec[..].af3.bf3.cf1
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type int[]
+  comparability -1
+variable a_vec[..].af3.bf3.cf2
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type int[]
+  comparability -1
+
+ppt a_vec_depth2:::ENTER
+ppt-type enter
+variable a_vec
+  var-kind variable
+  dec-type A[]
+  rep-type hashcode
+  flags is_param nomod
+  comparability -1
+variable a_vec[..]
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type hashcode[]
+  comparability -1
+variable a_vec[..].af1
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type java.lang.String[]
+  comparability -1
+variable a_vec[..].af2
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type int[]
+  comparability -1
+variable a_vec[..].af3
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type hashcode[]
+  comparability -1
+variable a_vec[..].af3.bf1
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type int[]
+  comparability -1
+variable a_vec[..].af3.bf2
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type int[]
+  comparability -1
+variable a_vec[..].af3.bf3
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type hashcode[]
+  comparability -1
+
+ppt a_vec_depth2:::EXIT1
+ppt-type exit
+variable a_vec
+  var-kind variable
+  dec-type A[]
+  rep-type hashcode
+  flags is_param nomod
+  comparability -1
+variable a_vec[..]
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type hashcode[]
+  comparability -1
+variable a_vec[..].af1
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type java.lang.String[]
+  comparability -1
+variable a_vec[..].af2
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type int[]
+  comparability -1
+variable a_vec[..].af3
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type hashcode[]
+  comparability -1
+variable a_vec[..].af3.bf1
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type int[]
+  comparability -1
+variable a_vec[..].af3.bf2
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type int[]
+  comparability -1
+variable a_vec[..].af3.bf3
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type hashcode[]
+  comparability -1
+
+ppt a_vec_depth1:::ENTER
+ppt-type enter
+variable a_vec
+  var-kind variable
+  dec-type A[]
+  rep-type hashcode
+  flags is_param nomod
+  comparability -1
+variable a_vec[..]
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type hashcode[]
+  comparability -1
+variable a_vec[..].af1
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type java.lang.String[]
+  comparability -1
+variable a_vec[..].af2
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type int[]
+  comparability -1
+variable a_vec[..].af3
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type hashcode[]
+  comparability -1
+
+ppt a_vec_depth1:::EXIT1
+ppt-type exit
+variable a_vec
+  var-kind variable
+  dec-type A[]
+  rep-type hashcode
+  flags is_param nomod
+  comparability -1
+variable a_vec[..]
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type hashcode[]
+  comparability -1
+variable a_vec[..].af1
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type java.lang.String[]
+  comparability -1
+variable a_vec[..].af2
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
+  rep-type int[]
+  comparability -1
+variable a_vec[..].af3
+  var-kind array
+  enclosing-var a_vec
+  array 1
+  dec-type A[]
   rep-type hashcode[]
   comparability -1
 
