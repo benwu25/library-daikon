@@ -13,15 +13,14 @@ pub struct A<'a> {
 }
 
 impl<'a> A<'a> {
-  // rename to dtrace_print_fields
-  pub fn dtrace_print(&self, depth: i32, prefix: String) {
+  pub fn dtrace_print_fields(&self, depth: i32, prefix: String) {
     if depth == 0 {
       return;
     }
     dtrace_print_str(self.af1, format!("{}{}", prefix, ".af1"));
     dtrace_print_prim::<u32>(self.af2, format!("{}{}", prefix, ".af2"));
     dtrace_print_pointer(self.af3 as *const _ as usize, format!("{}{}", prefix, ".af3"));
-    self.af3.dtrace_print(depth - 1, format!("{}{}", prefix, ".af3"));
+    self.af3.dtrace_print_fields(depth - 1, format!("{}{}", prefix, ".af3"));
   }
 
   pub fn dtrace_print_fields_vec(v: &Vec<&A>, depth: i32, prefix: String) {

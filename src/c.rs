@@ -10,8 +10,7 @@ pub struct C {
 }
 
 impl C {
-  // rename to dtrace_print_fields
-  pub fn dtrace_print(&self, depth: i32, prefix: String) {
+  pub fn dtrace_print_fields(&self, depth: i32, prefix: String) {
     if depth == 0 {
       return;
     }

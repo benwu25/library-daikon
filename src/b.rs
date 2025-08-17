@@ -13,8 +13,7 @@ pub struct B<'a> {
 }
 
 impl<'a> B<'a> {
-  // rename to dtrace_print_fields
-  pub fn dtrace_print(&self, depth: i32, prefix: String) {
+  pub fn dtrace_print_fields(&self, depth: i32, prefix: String) {
     if depth == 0 {
       return;
     }
@@ -22,7 +21,7 @@ impl<'a> B<'a> {
     dtrace_print_prim::<u16>(self.bf2, format!("{}{}", prefix, ".bf2"));
     dtrace_print_pointer(self.bf3 as *const _ as usize, format!("{}{}", prefix, ".bf3"));
 
-    self.bf3.dtrace_print(depth - 1, format!("{}{}", prefix, ".bf3"));
+    self.bf3.dtrace_print_fields(depth - 1, format!("{}{}", prefix, ".bf3"));
   }
 
   pub fn dtrace_print_fields_arr(v: &[&B], depth: i32, prefix: String) {

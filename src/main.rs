@@ -76,14 +76,14 @@ fn main() {
 fn foo(a: &A, b: i32) {
   dtrace_entry("foo:::ENTER", *foo_counter.lock().unwrap());
   dtrace_print_pointer(a as *const _ as usize, String::from("a"));
-  a.dtrace_print(3, String::from("a"));
+  a.dtrace_print_fields(3, String::from("a"));
   dtrace_print_prim::<i32>(b, String::from("b"));
   dtrace_newline();
 
 
   dtrace_exit("foo:::EXIT1", *foo_counter.lock().unwrap());
   dtrace_print_pointer(a as *const _ as usize, String::from("a"));
-  a.dtrace_print(3, String::from("a"));
+  a.dtrace_print_fields(3, String::from("a"));
   dtrace_print_prim::<i32>(b, String::from("b"));
   dtrace_newline();
   *foo_counter.lock().unwrap() += 1;
@@ -135,12 +135,12 @@ fn foo_bar(b_arr: &[&B]) {
 fn foo_baz(d: &D) {
   dtrace_entry("foo_baz:::ENTER", *foo_baz_counter.lock().unwrap());
   dtrace_print_pointer(d as *const _ as usize, String::from("d"));
-  d.dtrace_print(3, String::from("d"));
+  d.dtrace_print_fields(3, String::from("d"));
   dtrace_newline();
 
   dtrace_exit("foo_baz:::EXIT1", *foo_baz_counter.lock().unwrap());
   dtrace_print_pointer(d as *const _ as usize, String::from("d"));
-  d.dtrace_print(3, String::from("d"));
+  d.dtrace_print_fields(3, String::from("d"));
   dtrace_newline();
   *foo_baz_counter.lock().unwrap() += 1;
 }
