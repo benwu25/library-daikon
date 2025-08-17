@@ -5,8 +5,8 @@ use std::sync::{LazyLock, Mutex};
 use crate::tr;
 
 pub struct C {
-  pub f1: i16,
-  pub f2: i32,
+  pub cf1: i16,
+  pub cf2: i32,
   // pub f3: array or vec
 }
 
@@ -15,20 +15,20 @@ impl C {
     if depth == 0 {
       return;
     }
-    dtrace_print_prim::<i16>(self.f1, format!("{}{}", prefix, ".f1"));
-    dtrace_print_prim::<i32>(self.f2, format!("{}{}", prefix, ".f2"));
+    dtrace_print_prim::<i16>(self.cf1, format!("{}{}", prefix, ".cf1"));
+    dtrace_print_prim::<i32>(self.cf2, format!("{}{}", prefix, ".cf2"));
   }
 
   // don't care about addr of v or addr of C's
   pub fn dtrace_print_fields_vec(v: &Vec<&C>, prefix: String) {
-    C::dtrace_print_f1_vec(v, format!("{}{}", prefix, ".f1"));
-    C::dtrace_print_f2_vec(v, format!("{}{}", prefix, ".f2"));
+    C::dtrace_print_f1_vec(v, format!("{}{}", prefix, ".cf1"));
+    C::dtrace_print_f2_vec(v, format!("{}{}", prefix, ".cf2"));
   }
 
   pub fn dtrace_print_arr(v: &[&C], prefix: String) {
     dtrace_print_pointer_arr::<C>(&v, prefix.clone());
-    C::dtrace_print_f1_arr(&v, format!("{}{}", prefix, ".f1"));
-    C::dtrace_print_f2_arr(&v, format!("{}{}", prefix, ".f2"));
+    C::dtrace_print_f1_arr(&v, format!("{}{}", prefix, "[..].cf1"));
+    C::dtrace_print_f2_arr(&v, format!("{}{}", prefix, "[..].cf2"));
   }
 
   // TODO
@@ -53,20 +53,19 @@ impl C {
     }
   }
 
-  // TODO
   pub fn dtrace_print_f1_vec(v: &Vec<&C>, prefix: String) {
     match &mut *tr.lock().unwrap() {
       None => panic!("dtrace file is not open"),
       Some(traces) => {
-        writeln!(traces, "{}", format!("{}{}", prefix.clone(), "[..]"));
+        writeln!(traces, "{}", prefix.clone());
         let mut arr = String::from("[");
         let mut i = 0;
         while i < v.len()-1 {
-          arr.push_str(&format!("{} ", v[i].f1));
+          arr.push_str(&format!("{} ", v[i].cf1));
           i += 1;
         }
         if v.len() > 0 {
-          arr.push_str(&format!("{}", v[v.len() - 1].f1));
+          arr.push_str(&format!("{}", v[v.len() - 1].cf1));
         }
         arr.push_str("]");
         writeln!(traces, "{}", arr);
@@ -80,15 +79,15 @@ impl C {
     match &mut *tr.lock().unwrap() {
       None => panic!("dtrace file is not open"),
       Some(traces) => {
-        writeln!(traces, "{}", format!("{}{}", prefix.clone(), "[..]"));
+        writeln!(traces, "{}", prefix.clone());
         let mut arr = String::from("[");
         let mut i = 0;
         while i < v.len()-1 {
-          arr.push_str(&format!("{} ", v[i].f1));
+          arr.push_str(&format!("{} ", v[i].cf1));
           i += 1;
         }
         if v.len() > 0 {
-          arr.push_str(&format!("{}", v[v.len()-1].f1));
+          arr.push_str(&format!("{}", v[v.len()-1].cf1));
         }
         arr.push_str("]");
         writeln!(traces, "{}", arr);
@@ -102,15 +101,15 @@ impl C {
     match &mut *tr.lock().unwrap() {
       None => panic!("dtrace file is not open"),
       Some(traces) => {
-        writeln!(traces, "{}", format!("{}{}", prefix.clone(), "[..]"));
+        writeln!(traces, "{}", prefix.clone());
         let mut arr = String::from("[");
         let mut i = 0;
         while i < v.len()-1 {
-          arr.push_str(&format!("{} ", v[i].f2));
+          arr.push_str(&format!("{} ", v[i].cf2));
           i += 1;
         }
         if v.len() > 0 {
-          arr.push_str(&format!("{}", v[v.len()-1].f2));
+          arr.push_str(&format!("{}", v[v.len()-1].cf2));
         }
         arr.push_str("]");
         writeln!(traces, "{}", arr);
@@ -124,15 +123,15 @@ impl C {
     match &mut *tr.lock().unwrap() {
       None => panic!("dtrace file is not open"),
       Some(traces) => {
-        writeln!(traces, "{}", format!("{}{}", prefix.clone(), "[..]"));
+        writeln!(traces, "{}", prefix.clone());
         let mut arr = String::from("[");
         let mut i = 0;
         while i < v.len()-1 {
-          arr.push_str(&format!("{} ", v[i].f2));
+          arr.push_str(&format!("{} ", v[i].cf2));
           i += 1;
         }
         if v.len() > 0 {
-          arr.push_str(&format!("{}", v[v.len()-1].f2));
+          arr.push_str(&format!("{}", v[v.len()-1].cf2));
         }
         arr.push_str("]");
         writeln!(traces, "{}", arr);

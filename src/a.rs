@@ -7,9 +7,9 @@ use crate::tr;
 use crate::B;
 
 pub struct A<'a> {
-  pub f1: &'a str,
-  pub f2: u32,
-  pub f3: &'a B<'a>,
+  pub af1: &'a str,
+  pub af2: u32,
+  pub af3: &'a B<'a>,
 }
 
 impl<'a> A<'a> {
@@ -17,10 +17,10 @@ impl<'a> A<'a> {
     if depth == 0 {
       return;
     }
-    dtrace_print_str(self.f1, format!("{}{}", prefix, ".f1"));
-    dtrace_print_prim::<u32>(self.f2, format!("{}{}", prefix, ".f2"));
-    dtrace_print_pointer(self.f3 as *const _ as usize, format!("{}{}", prefix, ".f3"));
-    self.f3.dtrace_print(depth - 1, format!("{}{}", prefix, ".f3"));
+    dtrace_print_str(self.af1, format!("{}{}", prefix, ".af1"));
+    dtrace_print_prim::<u32>(self.af2, format!("{}{}", prefix, ".af2"));
+    dtrace_print_pointer(self.af3 as *const _ as usize, format!("{}{}", prefix, ".af3"));
+    self.af3.dtrace_print(depth - 1, format!("{}{}", prefix, ".af3"));
   }
 }
 

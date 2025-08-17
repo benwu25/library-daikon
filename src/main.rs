@@ -6,10 +6,12 @@ use std::sync::{LazyLock, Mutex};
 mod a;
 mod b;
 mod c;
+mod d;
 
 use a::A;
 use b::B;
 use c::C;
+use d::D;
 
 fn main() {
 
@@ -17,23 +19,31 @@ fn main() {
   /* vars */
   dtrace_newline();
 
-  let c = C { f1: 12, f2: 14 };
-  let b = B { f1: 23, f2: 97, f3: &c };
-  let a = A { f1: "hullo", f2: 16, f3: &b };
+  let c = C { cf1: 12, cf2: 14 };
+  let b = B { bf1: 23, bf2: 97, bf3: &c };
+  let a = A { af1: "hullo", af2: 16, af3: &b };
   foo(&a, 17);
 
   let arr = [1, 2, 3];
   bar(&arr);
 
-  let c2 = C { f1: 19, f2: 10 };
-  let c3 = C { f1: 7, f2: 61 };
+  let c2 = C { cf1: 19, cf2: 10 };
+  let c3 = C { cf1: 7, cf2: 61 };
   let c_arr = [&c, &c2, &c3];
   baz(&c_arr);
 
-  let b2 = B { f1: 6, f2: 1, f3: &c2 };
-  let b3 = B { f1: 12, f2: 11, f3: &c3 };
+  let b2 = B { bf1: 6, bf2: 1, bf3: &c2 };
+  let b3 = B { bf1: 12, bf2: 11, bf3: &c3 };
   let b_arr = [&b, &b2, &b3];
   foo_bar(&b_arr);
+
+  let d = D { df1: &arr };
+  foo_baz(&d);
+
+  let d2 = D { df1: &arr };
+  let d3 = D { df1: &arr };
+  let d_arr = [&d, &d2, &d3];
+  bar_foo(&d_arr);
 
   dtrace_exit_no_nonce("main:::EXIT1");
   /* vars */
@@ -96,6 +106,32 @@ fn foo_bar(b_arr: &[&B]) {
   *foo_bar_counter.lock().unwrap() += 1;
 }
 
+fn foo_baz(d: &D) {
+  dtrace_entry("foo_baz:::ENTER", *foo_baz_counter.lock().unwrap());
+  dtrace_print_pointer(d as *const _ as usize, String::from("d"));
+  d.dtrace_print(3, String::from("d"));
+  dtrace_newline();
+
+  dtrace_exit("foo_baz:::EXIT1", *foo_baz_counter.lock().unwrap());
+  dtrace_print_pointer(d as *const _ as usize, String::from("d"));
+  d.dtrace_print(3, String::from("d"));
+  dtrace_newline();
+  *foo_baz_counter.lock().unwrap() += 1;
+}
+
+fn bar_foo(d_arr: &[&D]) {
+  dtrace_entry("bar_foo:::ENTER", *bar_foo_counter.lock().unwrap());
+  dtrace_print_pointer(d_arr as *const _ as *const () as usize, String::from("d_arr"));
+  D::dtrace_print_arr(&d_arr, String::from("d_arr"));
+  dtrace_newline();
+
+  dtrace_exit("bar_foo:::EXIT1", *bar_foo_counter.lock().unwrap());
+  dtrace_print_pointer(d_arr as *const _ as *const () as usize, String::from("d_arr"));
+  D::dtrace_print_arr(&d_arr, String::from("d_arr"));
+  dtrace_newline();
+  *bar_foo_counter.lock().unwrap() += 1;
+}
+
 
 
 
@@ -110,6 +146,8 @@ static foo_counter: LazyLock<Mutex<u32>> = LazyLock::new(|| Mutex::new(1));
 static bar_counter: LazyLock<Mutex<u32>> = LazyLock::new(|| Mutex::new(1));
 static baz_counter: LazyLock<Mutex<u32>> = LazyLock::new(|| Mutex::new(1));
 static foo_bar_counter: LazyLock<Mutex<u32>> = LazyLock::new(|| Mutex::new(1));
+static foo_baz_counter: LazyLock<Mutex<u32>> = LazyLock::new(|| Mutex::new(1));
+static bar_foo_counter: LazyLock<Mutex<u32>> = LazyLock::new(|| Mutex::new(1));
 
 fn dtrace_open() -> Option<File> {
   match File::options().append(true).open("main.dtrace") {

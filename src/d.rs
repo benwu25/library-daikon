@@ -4,45 +4,29 @@ use std::io::prelude::*;
 use std::sync::{LazyLock, Mutex};
 use crate::tr;
 
-use crate::c::C;
-
-pub struct B<'a> {
-  pub bf1: i32,
-  pub bf2: u16,
-  pub bf3: &'a C,
+pub struct D<'a> {
+  pub df1: &'a [i32]
 }
 
-impl<'a> B<'a> {
+impl<'a> D<'a> {
   pub fn dtrace_print(&self, depth: i32, prefix: String) {
     if depth == 0 {
       return;
     }
-    dtrace_print_prim::<i32>(self.bf1, format!("{}{}", prefix, ".bf1"));
-    dtrace_print_prim::<u16>(self.bf2, format!("{}{}", prefix, ".bf2"));
-    dtrace_print_pointer(self.bf3 as *const _ as usize, format!("{}{}", prefix, ".bf3"));
-
-    self.bf3.dtrace_print(depth - 1, format!("{}{}", prefix, ".bf3"));
+    dtrace_print_prim_arr::<i32>(&self.df1, format!("{}{}", prefix, ".df1"));
   }
 
-  // TODO missing bf3 pointers
-  pub fn dtrace_print_arr(v: &[&B], prefix: String) {
-    dtrace_print_pointer_arr::<B>(&v, prefix.clone());
-
-    // Proposed fix: make a Vec<&C> and call C::dtrace_print_arr().
-    let mut ref_arr = Vec::new();
-    let mut i = 0;
-    while i < v.len() {
-      ref_arr.push(v[i].bf3);
-      i += 1;
-    }
-
-    B::dtrace_print_f1_arr(&v, format!("{}{}", prefix, "[..].bf1"));
-    B::dtrace_print_f2_arr(&v, format!("{}{}", prefix, "[..].bf2"));
-    // dtrace_print_pointer_arr::<C>(&ref_arr, format!("{}{}", prefix, "[..].bf3"));
-    C::dtrace_print_fields_vec(&ref_arr, format!("{}{}", prefix, "[..].bf3"));
+  pub fn dtrace_print_arr(v: &[&D], prefix: String) {
+    dtrace_print_pointer_arr::<D>(&v, prefix.clone());
+    D::dtrace_print_df1_arr(&v, format!("{}{}", prefix.clone(), "[..].df1"));
   }
 
-  pub fn dtrace_print_f1_arr(v: &[&B], prefix: String) {
+  pub fn dtrace_print_vec(v: &Vec<&D>, prefix: String) {
+
+  }
+
+  // only pointers
+  pub fn dtrace_print_df1_arr(v: &[&D], prefix: String) {
     match &mut *tr.lock().unwrap() {
       None => panic!("dtrace file is not open"),
       Some(traces) => {
@@ -50,40 +34,19 @@ impl<'a> B<'a> {
         let mut arr = String::from("[");
         let mut i = 0;
         while i < v.len()-1 {
-          arr.push_str(&format!("{} ", v[i].bf1));
+          arr.push_str(&format!("0x{:x} ", v[i].df1 as *const _ as *const () as usize));
           i += 1;
         }
         if v.len() > 0 {
-          arr.push_str(&format!("{}", v[v.len()-1].bf1));
+          arr.push_str(&format!("0x{:x}", v[v.len()-1].df1 as *const _ as *const () as usize));
         }
         arr.push_str("]");
         writeln!(traces, "{}", arr);
         writeln!(traces, "0");
-      },
+      }
     }
   }
-
-  pub fn dtrace_print_f2_arr(v: &[&B], prefix: String) {
-    match &mut *tr.lock().unwrap() {
-      None => panic!("dtrace file is not open"),
-      Some(traces) => {
-        writeln!(traces, "{}", prefix.clone());
-        let mut arr = String::from("[");
-        let mut i = 0;
-        while i < v.len()-1 {
-          arr.push_str(&format!("{} ", v[i].bf2));
-          i += 1;
-        }
-        if v.len() > 0 {
-          arr.push_str(&format!("{}", v[v.len()-1].bf2));
-        }
-        arr.push_str("]");
-        writeln!(traces, "{}", arr);
-        writeln!(traces, "0");
-      },
-    }
-  }
-} // impl B
+}
 
 
 //== daikon private library ==//

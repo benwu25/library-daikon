@@ -8,306 +8,396 @@ ppt-type enter
 ppt foo:::ENTER
 ppt-type enter
 variable a
-var-kind variable
-dec-type A
-rep-type hashcode
-flags is_param nomod classname
-comparability -1
-variable a.f1
-var-kind field f1
-enclosing-var a
-dec-type java.lang.String
-rep-type java.lang.String
-comparability -1
-variable a.f2
-var-kind field f2
-enclosing-var a
-dec-type int
-rep-type int
-comparability -1
-variable a.f3
-var-kind field f3
-enclosing-var a
-dec-type B
-rep-type hashcode
-comparability -1
-variable a.f3.f1
-var-kind field f1
-enclosing-var a.f3
-dec-type int
-rep-type int
-comparability -1
-variable a.f3.f2
-var-kind field f2
-enclosing-var a.f3
-dec-type int
-rep-type int
-comparability -1
-variable a.f3.f3
-var-kind field f3
-enclosing-var a.f3
-dec-type C
-rep-type hashcode
-comparability -1
-variable a.f3.f3.f1
-var-kind field f1
-enclosing-var a.f3.f3
-dec-type int
-rep-type int
-comparability -1
-variable a.f3.f3.f2
-var-kind field f2
-enclosing-var a.f3.f3
-dec-type int
-rep-type int
-comparability -1
+  var-kind variable
+  dec-type A
+  rep-type hashcode
+  flags is_param nomod classname
+  comparability -1
+variable a.af1
+  var-kind field af1
+  enclosing-var a
+  dec-type java.lang.String
+  rep-type java.lang.String
+  comparability -1
+variable a.af2
+  var-kind field af2
+  enclosing-var a
+  dec-type int
+  rep-type int
+  comparability -1
+variable a.af3
+  var-kind field af3
+  enclosing-var a
+  dec-type B
+  rep-type hashcode
+  comparability -1
+variable a.af3.bf1
+  var-kind field bf1
+  enclosing-var a.af3
+  dec-type int
+  rep-type int
+  comparability -1
+variable a.af3.bf2
+  var-kind field bf2
+  enclosing-var a.af3
+  dec-type int
+  rep-type int
+  comparability -1
+variable a.af3.bf3
+  var-kind field bf3
+  enclosing-var a.af3
+  dec-type C
+  rep-type hashcode
+  comparability -1
+variable a.af3.bf3.cf1
+  var-kind field cf1
+  enclosing-var a.af3.bf3
+  dec-type int
+  rep-type int
+  comparability -1
+variable a.af3.bf3.cf2
+  var-kind field cf2
+  enclosing-var a.af3.bf3
+  dec-type int
+  rep-type int
+  comparability -1
 variable b
-var-kind variable
-dec-type int
-rep-type int
-comparability -1
+  var-kind variable
+  dec-type int
+  rep-type int
+  comparability -1
 
 ppt foo:::EXIT1
 ppt-type exit
 variable a
-var-kind variable
-dec-type A
-rep-type hashcode
-flags is_param nomod classname
-comparability -1
-variable a.f1
-var-kind field f1
-enclosing-var a
-dec-type java.lang.String
-rep-type java.lang.String
-comparability -1
-variable a.f2
-var-kind field f2
-enclosing-var a
-dec-type int
-rep-type int
-comparability -1
-variable a.f3
-var-kind field f3
-enclosing-var a
-dec-type B
-rep-type hashcode
-comparability -1
-variable a.f3.f1
-var-kind field f1
-enclosing-var a.f3
-dec-type int
-rep-type int
-comparability -1
-variable a.f3.f2
-var-kind field f2
-enclosing-var a.f3
-dec-type int
-rep-type int
-comparability -1
-variable a.f3.f3
-var-kind field f3
-enclosing-var a.f3
-dec-type C
-rep-type hashcode
-comparability -1
-variable a.f3.f3.f1
-var-kind field f1
-enclosing-var a.f3.f3
-dec-type int
-rep-type int
-comparability -1
-variable a.f3.f3.f2
-var-kind field f2
-enclosing-var a.f3.f3
-dec-type int
-rep-type int
-comparability -1
+  var-kind variable
+  dec-type A
+  rep-type hashcode
+  flags is_param nomod classname
+  comparability -1
+variable a.af1
+  var-kind field af1
+  enclosing-var a
+  dec-type java.lang.String
+  rep-type java.lang.String
+  comparability -1
+variable a.af2
+  var-kind field af2
+  enclosing-var a
+  dec-type int
+  rep-type int
+  comparability -1
+variable a.af3
+  var-kind field af3
+  enclosing-var a
+  dec-type B
+  rep-type hashcode
+  comparability -1
+variable a.af3.bf1
+  var-kind field bf1
+  enclosing-var a.af3
+  dec-type int
+  rep-type int
+  comparability -1
+variable a.af3.bf2
+  var-kind field bf2
+  enclosing-var a.af3
+  dec-type int
+  rep-type int
+  comparability -1
+variable a.af3.bf3
+  var-kind field bf3
+  enclosing-var a.af3
+  dec-type C
+  rep-type hashcode
+  comparability -1
+variable a.af3.bf3.cf1
+  var-kind field cf1
+  enclosing-var a.af3.bf3
+  dec-type int
+  rep-type int
+  comparability -1
+variable a.af3.bf3.cf2
+  var-kind field cf2
+  enclosing-var a.af3.bf3
+  dec-type int
+  rep-type int
+  comparability -1
 variable b
-var-kind variable
-dec-type int
-rep-type int
-comparability -1
+  var-kind variable
+  dec-type int
+  rep-type int
+  comparability -1
 
 ppt bar:::ENTER
 ppt-type enter
 variable x
-var-kind variable
-dec-type int[]
-rep-type hashcode
-flags is_param nomod
-comparability -1
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags is_param nomod
+  comparability -1
 variable x[..]
-var-kind array
-enclosing-var x
-array 1
-dec-type int[]
-rep-type int[]
-comparability -1
+  var-kind array
+  enclosing-var x
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability -1
 
 ppt bar:::EXIT1
 ppt-type exit
 variable x
-var-kind variable
-dec-type int[]
-rep-type hashcode
-flags is_param nomod
-comparability -1
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags is_param nomod
+  comparability -1
 variable x[..]
-var-kind array
-enclosing-var x
-array 1
-dec-type int[]
-rep-type int[]
-comparability -1
+  var-kind array
+  enclosing-var x
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability -1
 
 ppt baz:::ENTER
 ppt-type enter
 variable c_arr
-var-kind variable
-dec-type C[]
-rep-type hashcode
-flags is_param nomod
-comparability -1
+  var-kind variable
+  dec-type C[]
+  rep-type hashcode
+  flags is_param nomod
+  comparability -1
 variable c_arr[..]
-var-kind array
-enclosing-var c_arr
-array 1
-dec-type hashcode[]
-rep-type hashcode[]
-comparability -1
-variable c_arr.f1[..]
-var-kind array
-enclosing-var c_arr
-array 1
-dec-type int[]
-rep-type int[]
-comparability -1
-variable c_arr.f2[..]
-var-kind array
-enclosing-var c_arr
-array 1
-dec-type int[]
-rep-type int[]
-comparability -1
-
+  var-kind array
+  enclosing-var c_arr
+  array 1
+  dec-type hashcode[]
+  rep-type hashcode[]
+  comparability -1
+variable c_arr[..].cf1
+  var-kind array
+  enclosing-var c_arr
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability -1
+variable c_arr[..].cf2
+  var-kind array
+  enclosing-var c_arr
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability -1
+  
 ppt baz:::EXIT1
 ppt-type enter
 variable c_arr
-var-kind variable
-dec-type C[]
-rep-type hashcode
-flags is_param nomod
-comparability -1
+  var-kind variable
+  dec-type C[]
+  rep-type hashcode
+  flags is_param nomod
+  comparability -1
 variable c_arr[..]
-var-kind array
-enclosing-var c_arr
-array 1
-dec-type hashcode[]
-rep-type hashcode[]
-comparability -1
-variable c_arr.f1[..]
-var-kind array
-enclosing-var c_arr
-array 1
-dec-type int[]
-rep-type int[]
-comparability -1
-variable c_arr.f2[..]
-var-kind array
-enclosing-var c_arr
-array 1
-dec-type int[]
-rep-type int[]
-comparability -1
+  var-kind array
+  enclosing-var c_arr
+  array 1
+  dec-type hashcode[]
+  rep-type hashcode[]
+  comparability -1
+variable c_arr[..].cf1
+  var-kind array
+  enclosing-var c_arr
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability -1
+variable c_arr[..].cf2
+  var-kind array
+  enclosing-var c_arr
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability -1
 
 ppt foo_bar:::ENTER
 ppt-type enter
 variable b_arr
-var-kind variable
-dec-type B[]
-rep-type hashcode
-flags is_param nomod
-comparability -1
+  var-kind variable
+  dec-type B[]
+  rep-type hashcode
+  flags is_param nomod
+  comparability -1
 variable b_arr[..]
-var-kind array
-enclosing-var b_arr
-array 1
-dec-type hashcode[]
-rep-type hashcode[]
-comparability -1
-variable b_arr.f1[..]
-var-kind array
-enclosing-var b_arr
-array 1
-dec-type int[]
-rep-type int[]
-comparability -1
-variable b_arr.f2[..]
-var-kind array
-enclosing-var b_arr
-array 1
-dec-type int[]
-rep-type int[]
-comparability -1
-variable b_arr.f3.f1[..]
-var-kind array
-enclosing-var b_arr
-array 1
-dec-type int[]
-rep-type int[]
-comparability -1
-variable b_arr.f3.f2[..]
-var-kind array
-enclosing-var b_arr
-array 1
-dec-type int[]
-rep-type int[]
-comparability -1
+  var-kind array
+  enclosing-var b_arr
+  array 1
+  dec-type hashcode[]
+  rep-type hashcode[]
+  comparability -1
+variable b_arr[..].bf1
+  var-kind array
+  enclosing-var b_arr
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability -1
+variable b_arr[..].bf2
+  var-kind array
+  enclosing-var b_arr
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability -1
+variable b_arr[..].bf3.cf1
+  var-kind array
+  enclosing-var b_arr
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability -1
+variable b_arr[..].bf3.cf2
+  var-kind array
+  enclosing-var b_arr
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability -1
 
 ppt foo_bar:::EXIT1
 ppt-type exit
 variable b_arr
-var-kind variable
-dec-type B[]
-rep-type hashcode
-flags is_param nomod
-comparability -1
+  var-kind variable
+  dec-type B[]
+  rep-type hashcode
+  flags is_param nomod
+  comparability -1
 variable b_arr[..]
-var-kind array
-enclosing-var b_arr
-array 1
-dec-type hashcode[]
-rep-type hashcode[]
-comparability -1
-variable b_arr.f1[..]
-var-kind array
-enclosing-var b_arr
-array 1
-dec-type int[]
-rep-type int[]
-comparability -1
-variable b_arr.f2[..]
-var-kind array
-enclosing-var b_arr
-array 1
-dec-type int[]
-rep-type int[]
-comparability -1
-variable b_arr.f3.f1[..]
-var-kind array
-enclosing-var b_arr
-array 1
-dec-type int[]
-rep-type int[]
-comparability -1
-variable b_arr.f3.f2[..]
-var-kind array
-enclosing-var b_arr
-array 1
-dec-type int[]
-rep-type int[]
-comparability -1
+  var-kind array
+  enclosing-var b_arr
+  array 1
+  dec-type hashcode[]
+  rep-type hashcode[]
+  comparability -1
+variable b_arr[..].bf1
+  var-kind array
+  enclosing-var b_arr
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability -1
+variable b_arr[..].bf2
+  var-kind array
+  enclosing-var b_arr
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability -1
+variable b_arr[..].bf3.cf1
+  var-kind array
+  enclosing-var b_arr
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability -1
+variable b_arr[..].bf3.cf2
+  var-kind array
+  enclosing-var b_arr
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability -1
+
+ppt foo_baz:::ENTER
+ppt-type enter
+variable d
+  var-kind variable
+  dec-type D
+  rep-type hashcode
+  flags is_param nomod classname
+  comparability -1
+variable d.df1
+  var-kind field df1
+  enclosing-var d
+  dec-type int[]
+  rep-type hashcode
+  comparability -1
+variable d.df1[..]
+  var-kind array
+  enclosing-var d.df1
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability -1
+
+ppt foo_baz:::EXIT1
+ppt-type exit
+variable d
+  var-kind variable
+  dec-type D
+  rep-type hashcode
+  flags is_param nomod classname
+  comparability -1
+variable d.df1
+  var-kind field df1
+  enclosing-var d
+  dec-type int[]
+  rep-type hashcode
+  comparability -1
+variable d.df1[..]
+  var-kind array
+  enclosing-var d.df1
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability -1
+
+ppt bar_foo:::ENTER
+ppt-type enter
+variable d_arr
+  var-kind variable
+  dec-type D[]
+  rep-type hashcode
+  flags is_param nomod classname
+  comparability -1
+variable d_arr[..]
+  var-kind array
+  enclosing-var d_arr
+  array 1
+  dec-type D[]
+  rep-type hashcode[]
+  comparability -1
+variable d_arr[..].df1
+  var-kind array
+  enclosing-var d_arr
+  array 1
+  dec-type D[]
+  rep-type hashcode[]
+  comparability -1
+
+ppt bar_foo:::EXIT1
+ppt-type exit
+variable d_arr
+  var-kind variable
+  dec-type D[]
+  rep-type hashcode
+  flags is_param nomod classname
+  comparability -1
+variable d_arr[..]
+  var-kind array
+  enclosing-var d_arr
+  array 1
+  dec-type D[]
+  rep-type hashcode[]
+  comparability -1
+variable d_arr[..].df1
+  var-kind array
+  enclosing-var d_arr
+  array 1
+  dec-type D[]
+  rep-type hashcode[]
+  comparability -1
 
 ppt main:::EXIT1
 ppt-type exit
