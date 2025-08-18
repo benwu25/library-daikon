@@ -29,7 +29,7 @@ impl X {
     match &mut *tr.lock().unwrap() {
       None => panic!("dtrace file is not open"),
       Some(traces) => {
-        writeln!(traces, "{}", var_name);
+        writeln!(traces, "{}", var_name).ok();
         let mut arr = String::from("[");
         let mut i = 0;
         while i < v.len()-1 {
@@ -40,8 +40,8 @@ impl X {
           arr.push_str(&format!("{}", v[v.len()-1].xf1));
         }
         arr.push_str("]");
-        writeln!(traces, "{}", arr);
-        writeln!(traces, "0");
+        writeln!(traces, "{}", arr).ok();
+        writeln!(traces, "0").ok();
       },
     }
   }
@@ -60,7 +60,7 @@ impl Y {
     match &mut *tr.lock().unwrap() {
       None => panic!("dtrace file is not open"),
       Some(traces) => {
-        writeln!(traces, "{}", var_name);
+        writeln!(traces, "{}", var_name).ok();
         let mut arr = String::from("[");
         let mut i = 0;
         while i < v.len()-1 {
@@ -71,8 +71,8 @@ impl Y {
           arr.push_str(&format!("{}", v[v.len()-1].yf1));
         }
         arr.push_str("]");
-        writeln!(traces, "{}", arr);
-        writeln!(traces, "0");
+        writeln!(traces, "{}", arr).ok();
+        writeln!(traces, "0").ok();
       },
     }
   }
@@ -92,7 +92,7 @@ impl Z {
     match &mut *tr.lock().unwrap() {
       None => panic!("dtrace file is not open"),
       Some(traces) => {
-        writeln!(traces, "{}", var_name);
+        writeln!(traces, "{}", var_name).ok();
         let mut arr = String::from("[");
         let mut i = 0;
         while i < v.len()-1 {
@@ -103,8 +103,8 @@ impl Z {
           arr.push_str(&format!("{}", v[v.len()-1].zf1));
         }
         arr.push_str("]");
-        writeln!(traces, "{}", arr);
-        writeln!(traces, "0");
+        writeln!(traces, "{}", arr).ok();
+        writeln!(traces, "0").ok();
       },
     }
   }
