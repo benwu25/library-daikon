@@ -25,11 +25,11 @@ impl X {
     X::dtrace_print_xf1_vec(v, format!("{}{}", prefix, ".xf1"));
   }
 
-  pub fn dtrace_print_xf1_vec(v: &Vec<&X>, prefix: String) {
+  pub fn dtrace_print_xf1_vec(v: &Vec<&X>, var_name: String) {
     match &mut *tr.lock().unwrap() {
       None => panic!("dtrace file is not open"),
       Some(traces) => {
-        writeln!(traces, "{}", prefix);
+        writeln!(traces, "{}", var_name);
         let mut arr = String::from("[");
         let mut i = 0;
         while i < v.len()-1 {
@@ -37,7 +37,7 @@ impl X {
           i += 1;
         }
         if v.len() > 0 {
-          arr.push_str(&format!("{}", v[i].xf1));
+          arr.push_str(&format!("{}", v[v.len()-1].xf1));
         }
         arr.push_str("]");
         writeln!(traces, "{}", arr);
@@ -56,11 +56,11 @@ impl Y {
     Y::dtrace_print_yf1_vec(v, format!("{}{}", prefix, ".yf1"));
   }
 
-  pub fn dtrace_print_yf1_vec(v: &Vec<&Y>, prefix: String) {
+  pub fn dtrace_print_yf1_vec(v: &Vec<&Y>, var_name: String) {
     match &mut *tr.lock().unwrap() {
       None => panic!("dtrace file is not open"),
       Some(traces) => {
-        writeln!(traces, "{}", prefix);
+        writeln!(traces, "{}", var_name);
         let mut arr = String::from("[");
         let mut i = 0;
         while i < v.len()-1 {
@@ -68,7 +68,7 @@ impl Y {
           i += 1;
         }
         if v.len() > 0 {
-          arr.push_str(&format!("{}", v[i].yf1));
+          arr.push_str(&format!("{}", v[v.len()-1].yf1));
         }
         arr.push_str("]");
         writeln!(traces, "{}", arr);
@@ -88,11 +88,11 @@ impl Z {
     Z::dtrace_print_zf1_vec(v, format!("{}{}", prefix, ".zf1"));
   }
 
-  pub fn dtrace_print_zf1_vec(v: &Vec<&Z>, prefix: String) {
+  pub fn dtrace_print_zf1_vec(v: &Vec<&Z>, var_name: String) {
     match &mut *tr.lock().unwrap() {
       None => panic!("dtrace file is not open"),
       Some(traces) => {
-        writeln!(traces, "{}", prefix);
+        writeln!(traces, "{}", var_name);
         let mut arr = String::from("[");
         let mut i = 0;
         while i < v.len()-1 {
@@ -100,7 +100,7 @@ impl Z {
           i += 1;
         }
         if v.len() > 0 {
-          arr.push_str(&format!("{}", v[i].zf1));
+          arr.push_str(&format!("{}", v[v.len()-1].zf1));
         }
         arr.push_str("]");
         writeln!(traces, "{}", arr);

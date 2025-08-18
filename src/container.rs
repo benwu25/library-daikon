@@ -38,11 +38,11 @@ impl<'a> Container<'a> {
   }
 }
 
-pub fn dtrace_print_pointer_vec<T>(v: &Vec<&T>, prefix: String) {
+pub fn dtrace_print_pointer_vec<T>(v: &Vec<&T>, var_name: String) {
   match &mut *tr.lock().unwrap() {
     None => panic!("dtrace file is not open"),
     Some(traces) => {
-      writeln!(traces, "{}", prefix);
+      writeln!(traces, "{}", var_name);
       let mut arr = String::from("[");
       let mut i = 0;
       while i < v.len()-1 {
@@ -50,7 +50,7 @@ pub fn dtrace_print_pointer_vec<T>(v: &Vec<&T>, prefix: String) {
         i += 1;
       }
       if v.len() > 0 {
-        arr.push_str(&format!("0x{:x}", v[i] as *const _ as usize));
+        arr.push_str(&format!("0x{:x}", v[v.len()-1] as *const _ as usize));
       }
       arr.push_str("]");
       writeln!(traces, "{}", arr);

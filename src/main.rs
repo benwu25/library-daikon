@@ -250,11 +250,11 @@ fn dtrace_open() -> Option<File> {
   }
 }
 
-pub fn dtrace_print_pointer_arr<T>(v: &[&T], prefix: String) {
+pub fn dtrace_print_pointer_arr<T>(v: &[&T], var_name: String) {
   match &mut *tr.lock().unwrap() {
     None => { panic!("dtrace file is not open"); },
     Some(traces) => {
-      writeln!(traces, "{}", prefix);
+      writeln!(traces, "{}", var_name);
       let mut arr = String::from("[");
       let mut i = 0;
       while i < v.len()-1 {
@@ -262,7 +262,7 @@ pub fn dtrace_print_pointer_arr<T>(v: &[&T], prefix: String) {
         i += 1;
       }
       if v.len() > 0 {
-        arr.push_str(&format!("0x{:x}", v[i] as *const _ as usize));
+        arr.push_str(&format!("0x{:x}", v[v.len()-1] as *const _ as usize));
       }
       arr.push_str("]");
       writeln!(traces, "{}", arr);
@@ -271,11 +271,11 @@ pub fn dtrace_print_pointer_arr<T>(v: &[&T], prefix: String) {
   }
 }
 
-pub fn dtrace_print_pointer_vec<T>(v: &Vec<&T>, prefix: String) {
+pub fn dtrace_print_pointer_vec<T>(v: &Vec<&T>, var_name: String) {
   match &mut *tr.lock().unwrap() {
     None => panic!("dtrace file is not open"),
     Some(traces) => {
-      writeln!(traces, "{}", prefix);
+      writeln!(traces, "{}", var_name);
       let mut arr = String::from("[");
       let mut i = 0;
       while i < v.len()-1 {
@@ -283,7 +283,7 @@ pub fn dtrace_print_pointer_vec<T>(v: &Vec<&T>, prefix: String) {
         i += 1;
       }
       if v.len() > 0 {
-        arr.push_str(&format!("0x{:x}", v[i] as *const _ as usize));
+        arr.push_str(&format!("0x{:x}", v[v.len()-1] as *const _ as usize));
       }
       arr.push_str("]");
       writeln!(traces, "{}", arr);
@@ -314,11 +314,11 @@ fn dtrace_print_prim_arr<T: std::fmt::Display>(v: &[T], prefix: String) {
   };
 }
 
-fn dtrace_print_str(v: &str, prefix: String) {
+fn dtrace_print_str(v: &str, var_name: String) {
   match &mut *tr.lock().unwrap() {
     None => { panic!("dtrace file is not open"); },
     Some(traces) => {
-      writeln!(traces, "{}", prefix);
+      writeln!(traces, "{}", var_name);
       writeln!(traces, "{}", v);
       writeln!(traces, "0");    
     }
@@ -326,22 +326,22 @@ fn dtrace_print_str(v: &str, prefix: String) {
 }
 
 // T must implement Display trait
-fn dtrace_print_prim<T: std::fmt::Display>(v: T, prefix: String) {
+fn dtrace_print_prim<T: std::fmt::Display>(v: T, var_name: String) {
   match &mut *tr.lock().unwrap() {
     None => { panic!("dtrace file is not open"); },
     Some(traces) => {
-      writeln!(traces, "{}", prefix);
+      writeln!(traces, "{}", var_name);
       writeln!(traces, "{}", v);
       writeln!(traces, "0");    
     }
   }
 }
 
-fn dtrace_print_pointer(v: usize, prefix: String) {
+fn dtrace_print_pointer(v: usize, var_name: String) {
   match &mut *tr.lock().unwrap() {
     None => { panic!("dtrace file is not open"); },
     Some(traces) => {
-      writeln!(traces, "{}", prefix);
+      writeln!(traces, "{}", var_name);
       writeln!(traces, "0x{:x}", v);
       writeln!(traces, "0");
     },
