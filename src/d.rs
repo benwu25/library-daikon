@@ -30,7 +30,7 @@ impl<'a> D<'a> {
     match &mut *tr.lock().unwrap() {
       None => panic!("dtrace file is not open"),
       Some(traces) => {
-        writeln!(traces, "{}", prefix.clone());
+        writeln!(traces, "{}", prefix);
         let mut arr = String::from("[");
         let mut i = 0;
         while i < v.len()-1 {
@@ -59,7 +59,7 @@ pub fn dtrace_print_pointer_arr<T>(v: &[&T], prefix: String) {
   match &mut *tr.lock().unwrap() {
     None => panic!("dtrace file is not open"),
     Some(traces) => {
-      writeln!(traces, "{}", prefix.clone());
+      writeln!(traces, "{}", prefix);
       let mut arr = String::from("[");
       let mut i = 0;
       while i < v.len()-1 {
@@ -80,7 +80,7 @@ pub fn dtrace_print_pointer_vec<T>(v: &Vec<&T>, prefix: String) {
   match &mut *tr.lock().unwrap() {
     None => panic!("dtrace file is not open"),
     Some(traces) => {
-      writeln!(traces, "{}", prefix.clone());
+      writeln!(traces, "{}", prefix);
       let mut arr = String::from("[");
       let mut i = 0;
       while i < v.len()-1 {
@@ -103,7 +103,7 @@ fn dtrace_print_prim_arr<T: std::fmt::Display>(v: &[T], prefix: String) {
   match &mut *tr.lock().unwrap() {
     None => panic!("dtrace file is not open"),
     Some(traces) => {
-      writeln!(traces, "{}", format!("{}{}", prefix.clone(), "[..]"));
+      writeln!(traces, "{}", format!("{}{}", prefix, "[..]"));
       let mut arr = String::from("[");
       let mut i = 0;
       while i < v.len()-1 {

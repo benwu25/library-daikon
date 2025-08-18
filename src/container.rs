@@ -42,7 +42,7 @@ pub fn dtrace_print_pointer_vec<T>(v: &Vec<&T>, prefix: String) {
   match &mut *tr.lock().unwrap() {
     None => panic!("dtrace file is not open"),
     Some(traces) => {
-      writeln!(traces, "{}", prefix.clone());
+      writeln!(traces, "{}", prefix);
       let mut arr = String::from("[");
       let mut i = 0;
       while i < v.len()-1 {
