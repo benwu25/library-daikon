@@ -154,40 +154,40 @@ fn dtrace_print_pointer(v: usize, var_name: String) {
   }
 }
 
-fn dtrace_entry_no_nonce(name: &str) {
+fn dtrace_entry_no_nonce(ppt_name: &str) {
   match &mut *tr.lock().unwrap() {
     None => panic!("dtrace file is not open"),
     Some(traces) => {
-      writeln!(traces, "{}", name).ok();
+      writeln!(traces, "{}", ppt_name).ok();
     },
   }
 }
 
-fn dtrace_exit_no_nonce(name: &str) {
+fn dtrace_exit_no_nonce(ppt_name: &str) {
   match &mut *tr.lock().unwrap() {
     None => panic!("dtrace file is not open"),
     Some(traces) => {
-      writeln!(traces, "{}", name).ok();
+      writeln!(traces, "{}", ppt_name).ok();
     },
   }
 }
 
-fn dtrace_entry(name: &str, nonce: u32) {
+fn dtrace_entry(ppt_name: &str, nonce: u32) {
   match &mut *tr.lock().unwrap() {
     None => panic!("dtrace file is not open"),
     Some(traces) => {
-      writeln!(traces, "{}", name).ok();
+      writeln!(traces, "{}", ppt_name).ok();
       writeln!(traces, "this_invocation_nonce").ok();
       writeln!(traces, "{}", nonce).ok();
     },
   }
 }
 
-fn dtrace_exit(name: &str, nonce: u32) {
+fn dtrace_exit(ppt_name: &str, nonce: u32) {
   match &mut *tr.lock().unwrap() {
     None => panic!("dtrace file is not open"),
     Some(traces) => {
-      writeln!(traces, "{}", name).ok();
+      writeln!(traces, "{}", ppt_name).ok();
       writeln!(traces, "this_invocation_nonce").ok();
       writeln!(traces, "{}", nonce).ok();
     },
