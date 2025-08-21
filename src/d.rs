@@ -1,204 +1,208 @@
 // synthesized imports
+use crate::tr;
 use std::fs::File;
 use std::io::prelude::*;
 use std::sync::{LazyLock, Mutex};
-use crate::tr;
 
 pub struct D<'a> {
-  pub df1: &'a [i32]
+    pub df1: &'a [i32],
 }
 
 impl<'a> D<'a> {
-  pub fn dtrace_print_fields(&self, depth: i32, prefix: String) {
-    if depth == 0 {
-      return;
-    }
-  
-    dtrace_print_prim_arr::<i32>(self.df1, format!("{}{}", prefix, ".df1"));
-  }
-
-  pub fn dtrace_print_fields_arr(v: &[&D], depth: i32, prefix: String) {
-    if depth == 0 {
-      return;
-    }
-
-    D::dtrace_print_df1_arr(v, format!("{}{}", prefix, ".df1"));
-  }
-
-  // only pointers
-  pub fn dtrace_print_df1_arr(v: &[&D], var_name: String) {
-    match &mut *tr.lock().unwrap() {
-      None => panic!("dtrace file is not open"),
-      Some(traces) => {
-        writeln!(traces, "{}", var_name).ok();
-        let mut arr = String::from("[");
-        let mut i = 0;
-        while i < v.len()-1 {
-          arr.push_str(&format!("0x{:x} ", v[i].df1 as *const _ as *const () as usize));
-          i += 1;
+    pub fn dtrace_print_fields(&self, depth: i32, prefix: String) {
+        if depth == 0 {
+            return;
         }
-        if v.len() > 0 {
-          arr.push_str(&format!("0x{:x}", v[v.len()-1].df1 as *const _ as *const () as usize));
-        }
-        arr.push_str("]");
-        writeln!(traces, "{}", arr).ok();
-        writeln!(traces, "0").ok();
-      }
+
+        dtrace_print_prim_arr::<i32>(self.df1, format!("{}{}", prefix, ".df1"));
     }
-  }
+
+    pub fn dtrace_print_fields_arr(v: &[&D], depth: i32, prefix: String) {
+        if depth == 0 {
+            return;
+        }
+
+        D::dtrace_print_df1_arr(v, format!("{}{}", prefix, ".df1"));
+    }
+
+    // only pointers
+    pub fn dtrace_print_df1_arr(v: &[&D], var_name: String) {
+        match &mut *tr.lock().unwrap() {
+            None => panic!("dtrace file is not open"),
+            Some(traces) => {
+                writeln!(traces, "{}", var_name).ok();
+                let mut arr = String::from("[");
+                let mut i = 0;
+                while i < v.len() - 1 {
+                    arr.push_str(&format!(
+                        "0x{:x} ",
+                        v[i].df1 as *const _ as *const () as usize
+                    ));
+                    i += 1;
+                }
+                if v.len() > 0 {
+                    arr.push_str(&format!(
+                        "0x{:x}",
+                        v[v.len() - 1].df1 as *const _ as *const () as usize
+                    ));
+                }
+                arr.push_str("]");
+                writeln!(traces, "{}", arr).ok();
+                writeln!(traces, "0").ok();
+            }
+        }
+    }
 }
 
-
 //== daikon private library ==//
-
 
 // nonce counters
 /* none */
 
 pub fn dtrace_print_pointer_arr<T>(v: &[&T], var_name: String) {
-  match &mut *tr.lock().unwrap() {
-    None => panic!("dtrace file is not open"),
-    Some(traces) => {
-      writeln!(traces, "{}", var_name).ok();
-      let mut arr = String::from("[");
-      let mut i = 0;
-      while i < v.len()-1 {
-        arr.push_str(&format!("0x{:x} ", v[i] as *const _ as usize));
-        i += 1;
-      }
-      if v.len() > 0 {
-        arr.push_str(&format!("0x{:x}", v[v.len()-1] as *const _ as usize));
-      }
-      arr.push_str("]");
-      writeln!(traces, "{}", arr).ok();
-      writeln!(traces, "0").ok();
-    },
-  }
+    match &mut *tr.lock().unwrap() {
+        None => panic!("dtrace file is not open"),
+        Some(traces) => {
+            writeln!(traces, "{}", var_name).ok();
+            let mut arr = String::from("[");
+            let mut i = 0;
+            while i < v.len() - 1 {
+                arr.push_str(&format!("0x{:x} ", v[i] as *const _ as usize));
+                i += 1;
+            }
+            if v.len() > 0 {
+                arr.push_str(&format!("0x{:x}", v[v.len() - 1] as *const _ as usize));
+            }
+            arr.push_str("]");
+            writeln!(traces, "{}", arr).ok();
+            writeln!(traces, "0").ok();
+        }
+    }
 }
 
 pub fn dtrace_print_pointer_vec<T>(v: &Vec<&T>, var_name: String) {
-  match &mut *tr.lock().unwrap() {
-    None => panic!("dtrace file is not open"),
-    Some(traces) => {
-      writeln!(traces, "{}", var_name).ok();
-      let mut arr = String::from("[");
-      let mut i = 0;
-      while i < v.len()-1 {
-        arr.push_str(&format!("0x{:x} ", v[i] as *const _ as usize));
-        i += 1;
-      }
-      if v.len() > 0 {
-        arr.push_str(&format!("0x{:x}", v[v.len()-1] as *const _ as usize));
-      }
-      arr.push_str("]");
-      writeln!(traces, "{}", arr).ok();
-      writeln!(traces, "0").ok();
-    },
-  }
+    match &mut *tr.lock().unwrap() {
+        None => panic!("dtrace file is not open"),
+        Some(traces) => {
+            writeln!(traces, "{}", var_name).ok();
+            let mut arr = String::from("[");
+            let mut i = 0;
+            while i < v.len() - 1 {
+                arr.push_str(&format!("0x{:x} ", v[i] as *const _ as usize));
+                i += 1;
+            }
+            if v.len() > 0 {
+                arr.push_str(&format!("0x{:x}", v[v.len() - 1] as *const _ as usize));
+            }
+            arr.push_str("]");
+            writeln!(traces, "{}", arr).ok();
+            writeln!(traces, "0").ok();
+        }
+    }
 }
 
 // T must implement Display trait
 fn dtrace_print_prim_arr<T: std::fmt::Display>(v: &[T], prefix: String) {
-  dtrace_print_pointer(v as *const _ as *const () as usize, prefix.clone());
-  match &mut *tr.lock().unwrap() {
-    None => panic!("dtrace file is not open"),
-    Some(traces) => {
-      writeln!(traces, "{}", format!("{}{}", prefix, "[..]")).ok();
-      let mut arr = String::from("[");
-      let mut i = 0;
-      while i < v.len()-1 {
-        arr.push_str(&format!("{} ", v[i]));
-        i += 1;
-      }
-      if v.len() > 0 {
-        arr.push_str(&format!("{}", v[v.len()-1]));
-      }
-      arr.push_str("]");
-      writeln!(traces, "{}", arr).ok();
-      writeln!(traces, "0").ok();
-    },
-  }
+    dtrace_print_pointer(v as *const _ as *const () as usize, prefix.clone());
+    match &mut *tr.lock().unwrap() {
+        None => panic!("dtrace file is not open"),
+        Some(traces) => {
+            writeln!(traces, "{}", format!("{}{}", prefix, "[..]")).ok();
+            let mut arr = String::from("[");
+            let mut i = 0;
+            while i < v.len() - 1 {
+                arr.push_str(&format!("{} ", v[i]));
+                i += 1;
+            }
+            if v.len() > 0 {
+                arr.push_str(&format!("{}", v[v.len() - 1]));
+            }
+            arr.push_str("]");
+            writeln!(traces, "{}", arr).ok();
+            writeln!(traces, "0").ok();
+        }
+    }
 }
 
 fn dtrace_print_str(v: &str, var_name: String) {
-  match &mut *tr.lock().unwrap() {
-    None => panic!("dtrace file is not open"),
-    Some(traces) => {
-      writeln!(traces, "{}", var_name).ok();
-      writeln!(traces, "\"{}\"", v).ok();
-      writeln!(traces, "0").ok();
-    },
-  }
+    match &mut *tr.lock().unwrap() {
+        None => panic!("dtrace file is not open"),
+        Some(traces) => {
+            writeln!(traces, "{}", var_name).ok();
+            writeln!(traces, "\"{}\"", v).ok();
+            writeln!(traces, "0").ok();
+        }
+    }
 }
 
 // T must implement Display trait
 fn dtrace_print_prim<T: std::fmt::Display>(v: T, var_name: String) {
-  match &mut *tr.lock().unwrap() {
-    None => panic!("dtrace file is not open"),
-    Some(traces) => {
-      writeln!(traces, "{}", var_name).ok();
-      writeln!(traces, "{}", v).ok();
-      writeln!(traces, "0").ok();
-    },
-  }
+    match &mut *tr.lock().unwrap() {
+        None => panic!("dtrace file is not open"),
+        Some(traces) => {
+            writeln!(traces, "{}", var_name).ok();
+            writeln!(traces, "{}", v).ok();
+            writeln!(traces, "0").ok();
+        }
+    }
 }
 
 fn dtrace_print_pointer(v: usize, var_name: String) {
-  match &mut *tr.lock().unwrap() {
-    None => panic!("dtrace file is not open"),
-    Some(traces) => {
-      writeln!(traces, "{}", var_name).ok();
-      writeln!(traces, "0x{:x}", v).ok();
-      writeln!(traces, "0").ok();
-    },
-  }
+    match &mut *tr.lock().unwrap() {
+        None => panic!("dtrace file is not open"),
+        Some(traces) => {
+            writeln!(traces, "{}", var_name).ok();
+            writeln!(traces, "0x{:x}", v).ok();
+            writeln!(traces, "0").ok();
+        }
+    }
 }
 
 fn dtrace_entry_no_nonce(ppt_name: &str) {
-  match &mut *tr.lock().unwrap() {
-    None => panic!("dtrace file is not open"),
-    Some(traces) => {
-      writeln!(traces, "{}", ppt_name).ok();
-    },
-  }
+    match &mut *tr.lock().unwrap() {
+        None => panic!("dtrace file is not open"),
+        Some(traces) => {
+            writeln!(traces, "{}", ppt_name).ok();
+        }
+    }
 }
 
 fn dtrace_exit_no_nonce(ppt_name: &str) {
-  match &mut *tr.lock().unwrap() {
-    None => panic!("dtrace file is not open"),
-    Some(traces) => {
-      writeln!(traces, "{}", ppt_name).ok();
-    },
-  }
+    match &mut *tr.lock().unwrap() {
+        None => panic!("dtrace file is not open"),
+        Some(traces) => {
+            writeln!(traces, "{}", ppt_name).ok();
+        }
+    }
 }
 
 fn dtrace_entry(ppt_name: &str, nonce: u32) {
-  match &mut *tr.lock().unwrap() {
-    None => panic!("dtrace file is not open"),
-    Some(traces) => {
-      writeln!(traces, "{}", ppt_name).ok();
-      writeln!(traces, "this_invocation_nonce").ok();
-      writeln!(traces, "{}", nonce).ok();
-    },
-  }
+    match &mut *tr.lock().unwrap() {
+        None => panic!("dtrace file is not open"),
+        Some(traces) => {
+            writeln!(traces, "{}", ppt_name).ok();
+            writeln!(traces, "this_invocation_nonce").ok();
+            writeln!(traces, "{}", nonce).ok();
+        }
+    }
 }
 
 fn dtrace_exit(ppt_name: &str, nonce: u32) {
-  match &mut *tr.lock().unwrap() {
-    None => panic!("dtrace file is not open"),
-    Some(traces) => {
-      writeln!(traces, "{}", ppt_name).ok();
-      writeln!(traces, "this_invocation_nonce").ok();
-      writeln!(traces, "{}", nonce).ok();
-    },
-  }
+    match &mut *tr.lock().unwrap() {
+        None => panic!("dtrace file is not open"),
+        Some(traces) => {
+            writeln!(traces, "{}", ppt_name).ok();
+            writeln!(traces, "this_invocation_nonce").ok();
+            writeln!(traces, "{}", nonce).ok();
+        }
+    }
 }
 
 fn dtrace_newline() {
-  match &mut *tr.lock().unwrap() {
-    None => panic!("dtrace file is not open"),
-    Some(traces) => {
-      writeln!(traces, "").ok();
-    },
-  }
+    match &mut *tr.lock().unwrap() {
+        None => panic!("dtrace file is not open"),
+        Some(traces) => {
+            writeln!(traces, "").ok();
+        }
+    }
 }
